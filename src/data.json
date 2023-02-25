@@ -1,0 +1,17 @@
+{
+    "brandName": "Dashboard",
+    "age": 35,
+    "isMarried": true,
+    "hobbies": [
+      "reading",
+      "swimming",
+      "hiking"
+    ],
+    "address": {
+      "street": "123 Main St",
+      "city": "Anytown",
+      "state": "CA",
+      "zip": "12345"
+    }
+  }
+  
