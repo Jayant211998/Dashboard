@@ -1,17 +1,39 @@
 {
     "brandName": "Dashboard",
-    "age": 35,
-    "isMarried": true,
-    "hobbies": [
-      "reading",
-      "swimming",
-      "hiking"
-    ],
-    "address": {
-      "street": "123 Main St",
-      "city": "Anytown",
-      "state": "CA",
-      "zip": "12345"
-    }
-  }
+    "data1":"Complaints",
+    "data2":"Requests",
+    "data3":"Water Supply",
+    "data4":"Events",
+    "count1":"281",
+    "count2":"2,300",
+    "count3":"34k",
+    "count4":"+91",
+    "analysisLable1":"than lask week",
+    "analysisLable2":"than last month",
+    "analysisLable3":"than yesterday",
+    "analysisLable4":"Just updated",
+    "analysisAmount1":"+55%",
+    "analysisAmount2":"+3%",
+    "analysisAmount3":"+1%",
+    "analysisAmount4":"",
+    "analysiscolor1":"success",
+    "analysiscolor2":"success",
+    "analysiscolor3":"success",
+    "analysiscolor4":"success",
+    "graphcolor1":"info",
+    "graphcolor2":"success",
+    "graphcolor3":"dark",
+    "graphtitle1":"website views",
+    "graphtitle2":"daily sales",
+    "graphtitle3":"completed tasks",
+    "graphdescription1":"Last Campaign Performance",
+    "graphdescription2":"+15% increase in today sales.",
+    "graphdescription3":"Last Campaign Performance",
+    "graphdate1":"campaign sent 2 days ago",
+    "graphdate2":"updated 4 min ago",
+    "graphdate3":"just updated",
+    "totalcomplaints":"10"
+
+
+}
   
