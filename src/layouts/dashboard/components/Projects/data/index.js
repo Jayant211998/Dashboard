@@ -2,7 +2,6 @@ import React from "react";
 
 import complainantData from "./data.json";
 
-// @mui material components
 export default function data(handleClick) {
   const [tableData, setTableData] = React.useState([]);
 

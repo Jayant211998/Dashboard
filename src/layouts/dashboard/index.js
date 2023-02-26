@@ -1,19 +1,35 @@
-import Grid from "@mui/material/Grid";
+import { useState, useEffect } from "react";
 
+import Grid from "@mui/material/Grid";
 import MDBox from "components/MDBox";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
 // Dashboard components
 import Projects from "layouts/dashboard/components/Projects";
 
-import data from "../../data.json";
-
 function Dashboard() {
-  // const { sales, tasks } = reportsLineChartData;
+  const [complaint, setComplaint] = useState(0);
+  const [request, setRequest] = useState(0);
+  const [waterFlow, setwaterFlow] = useState(0);
+  const [events, setEvents] = useState(0);
+  const [newComplaint, setNewComplaint] = useState(0);
+  const [newRequest, setNewRequest] = useState(0);
+  const [newWaterFlow, setNewWaterFlow] = useState(0);
+  const [newEvents, setNewEvents] = useState(0);
+
+  useEffect(() => {
+    setComplaint(281);
+    setNewComplaint(10);
+    setRequest(2300);
+    setNewRequest(3);
+    setwaterFlow(34000);
+    setNewWaterFlow(15);
+    setEvents(91);
+    setNewEvents(1);
+  }, []);
 
   return (
     <DashboardLayout>
@@ -25,12 +41,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="dark"
                 icon="weekend"
-                title={data.data1}
-                count={data.count1}
+                title="Complaints"
+                count={complaint}
                 percentage={{
-                  color: data.analysiscolor1,
-                  amount: data.analysisAmount1,
-                  label: data.analysisLable1,
+                  color: "success",
+                  amount: newComplaint,
+                  label: "In this week",
                 }}
               />
             </MDBox>
@@ -39,12 +55,12 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="leaderboard"
-                title={data.data2}
-                count={data.count2}
+                title="Requests"
+                count={request}
                 percentage={{
-                  color: data.analysiscolor2,
-                  amount: data.analysisAmount2,
-                  label: data.analysisLable2,
+                  color: "success",
+                  amount: newRequest,
+                  label: "In this week",
                 }}
               />
             </MDBox>
@@ -54,12 +70,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="success"
                 icon="store"
-                title={data.data3}
-                count={data.count3}
+                title="Water Supply"
+                count={waterFlow}
                 percentage={{
-                  color: data.analysiscolor3,
-                  amount: data.analysisAmount3,
-                  label: data.analysisLable3,
+                  color: "success",
+                  amount: newWaterFlow,
+                  label: "In this week",
                 }}
               />
             </MDBox>
@@ -69,12 +85,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title={data.data4}
-                count={data.count4}
+                title="Events"
+                count={events}
                 percentage={{
-                  color: data.analysiscolor4,
-                  amount: data.analysisAmount4,
-                  label: data.analysisLable4,
+                  color: "success",
+                  amount: newEvents,
+                  label: "In this week",
                 }}
               />
             </MDBox>
@@ -88,7 +104,6 @@ function Dashboard() {
           </Grid>
         </MDBox>
       </MDBox>
-      <Footer />
     </DashboardLayout>
   );
 }

@@ -1,0 +1,54 @@
+{
+    "data" : [
+        {
+            "id": "1",
+            "name": "ABC",
+            "date": "25/02/2023",
+            "status": "pending",
+            "details": ""
+        },
+        {
+            "id": "2",
+            "name": "ABC",
+            "date": "25/02/2023",
+            "status": "pending",
+            "details": ""
+        },
+        {
+            "id": "3",
+            "name": "ABC",
+            "date": "25/02/2023",
+            "status": "pending",
+            "details": ""
+        },
+        {
+            "id": "4",
+            "name": "ABC",
+            "date": "25/02/2023",
+            "status": "pending",
+            "details": ""
+        },
+        {
+            "id": "5",
+            "name": "ABC",
+            "date": "25/02/2023",
+            "status": "pending",
+            "details": ""
+        },
+        {
+            "id": "6",
+            "name": "ABC",
+            "date": "25/02/2023",
+            "status": "pending",
+            "details": ""
+        },
+        {
+            "id": "7",
+            "name": "ABC",
+            "date": "25/02/2023",
+            "status": "pending",
+            "details": ""
+        }          
+  ],
+  "totalcomplaints": "7"
+}
