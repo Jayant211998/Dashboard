@@ -1,8 +1,6 @@
 import Dashboard from "layouts/dashboard";
+import WaterSupply from "layouts/watersupply";
 import Tables from "layouts/tables";
-// import Billing from "layouts/billing";
-// import RTL from "layouts/rtl";
-// import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
@@ -24,17 +22,17 @@ const routes = [
     name: "Request",
     key: "tables",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
+    route: "/request",
     component: <Tables />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Billing",
-  //   key: "billing",
-  //   icon: <Icon fontSize="small">receipt_long</Icon>,
-  //   route: "/billing",
-  //   component: <Billing />,
-  // },
+  {
+    type: "collapse",
+    name: "Water Supply",
+    key: "watersupply",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/watersupply",
+    component: <WaterSupply />,
+  },
   // {
   //   type: "collapse",
   //   name: "RTL",
