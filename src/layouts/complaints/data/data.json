@@ -1,0 +1,75 @@
+{
+    "data" : [
+    {
+      "id": "1",
+      "complaint": "Garbage Problem1",
+      "complainant": "ABC",
+      "date": "25/02/2023",
+      "details": ""
+    },
+    {
+      "id": "2",
+      "complaint": "Garbage Problem2",
+      "complainant": "ABC",
+      "date": "25/02/2023",
+      "details": ""
+    },
+    {
+      "id": "3",
+      "complaint": "Garbage Problem3",
+      "complainant": "ABC",
+      "date": "25/02/2023",
+      "details": ""
+    },
+    {
+      "id": "4",
+      "complaint": "Garbage Problem4",
+      "complainant": "ABC",
+      "date": "25/02/2023",
+      "details": ""
+    },
+    {
+      "id": "5",
+      "complaint": "Garbage Problem5",
+      "complainant": "ABC",
+      "date": "25/02/2023",
+      "details": ""
+    },
+    {
+      "id": "6",
+      "complaint": "Garbage Problem6",
+      "complainant": "ABC",
+      "date": "25/02/2023",
+      "details": ""
+    },
+    {
+      "id": "7",
+      "complaint": "Garbage Problem7",
+      "complainant": "ABC",
+      "date": "25/02/2023",
+      "details": ""
+    },
+    {
+      "id": "8",
+      "complaint": "Garbage Problem8",
+      "complainant": "ABC",
+      "date": "25/02/2023",
+      "details": ""
+    },
+    {
+      "id": "9",
+      "complaint": "Garbage Problem9",
+      "complainant": "ABC",
+      "date": "25/02/2023",
+      "details": ""
+    },
+    {
+      "id": "10",
+      "complaint": "Garbage Problem10",
+      "complainant": "ABC",
+      "date": "25/02/2023",
+      "details": ""
+    }
+  ],
+  "totalcomplaints": "10"
+}

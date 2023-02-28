@@ -1,6 +1,7 @@
 import Dashboard from "layouts/dashboard";
 import WaterSupply from "layouts/watersupply";
 import Tables from "layouts/tables";
+import Complaints from "layouts/complaints";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
@@ -33,14 +34,14 @@ const routes = [
     route: "/watersupply",
     component: <WaterSupply />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "RTL",
-  //   key: "rtl",
-  //   icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
-  //   route: "/rtl",
-  //   component: <RTL />,
-  // },
+  {
+    type: "collapse",
+    name: "Complaints",
+    key: "complaints",
+    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
+    route: "/complaints",
+    component: <Complaints />,
+  },
   // {
   //   type: "collapse",
   //   name: "Notifications",
