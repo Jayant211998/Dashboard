@@ -14,13 +14,13 @@ Coded by www.creative-tim.com
 */
 
 /**
-  The gradientChartLine() function helps you to create a gradient color for the chart line
+  The gradientChaine() function helps you to create a gradient color for the chart line
  */
 
 // Material Dashboard 2 React helper functions
 import rgba from "assets/theme-dark/functions/rgba";
 
-function gradientChartLine(chart, color, opacity = 0.2) {
+function gradientChaine(chart, color, opacity = 0.2) {
   const ctx = chart.getContext("2d");
   const gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
   const primaryColor = rgba(color, opacity).toString();
@@ -32,4 +32,4 @@ function gradientChartLine(chart, color, opacity = 0.2) {
   return gradientStroke;
 }
 
-export default gradientChartLine;
+export default gradientChaine;

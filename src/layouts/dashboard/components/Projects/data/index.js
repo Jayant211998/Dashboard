@@ -1,6 +1,7 @@
 import React from "react";
 
 import complainantData from "./data.json";
+import assignees from "./assignees.json";
 
 export default function data(handleClick) {
   const [tableData, setTableData] = React.useState([]);
@@ -35,5 +36,7 @@ export default function data(handleClick) {
     ],
 
     rows: TableContent,
+    assignees: assignees.names,
+    tableData: complainantData.data,
   };
 }

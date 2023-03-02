@@ -1,35 +1,38 @@
 import React from "react";
 
-import Modal from "components/Modals/Modals";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
+} from "@mui/material";
 
 import PropTypes from "prop-types";
 
 export default function WaterSupplyPopup({ handleClose, detailData }) {
   return (
-    <Modal>
-      <Card sx={{ maxWidth: 345 }}>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {detailData.id}
+    <Dialog open={detailData !== null} handleclose={handleClose}>
+      <DialogTitle>Change Made Successfully</DialogTitle>
+      <DialogContent>
+        <Typography gutterBottom variant="h5" component="div">
+          {detailData.id}
+        </Typography>
+        {detailData.status === "off" ? (
+          <Typography variant="body2" color="text.secondary">
+            You have successfully Enabled the Water Supply in {detailData.colony_name}
           </Typography>
-          {detailData.status === "off" ? (
-            <Typography variant="body2" color="text.secondary">
-              You have successfully Enabled the Water Supply in {detailData.colony_name}
-            </Typography>
-          ) : (
-            <Typography variant="body2" color="text.secondary">
-              You have successfully Disabled the Water Supply in {detailData.colony_name}
-            </Typography>
-          )}
-          <button type="button" onClick={handleClose}>
-            Close
-          </button>
-        </CardContent>
-      </Card>
-    </Modal>
+        ) : (
+          <Typography variant="body2" color="text.secondary">
+            You have successfully Disabled the Water Supply in {detailData.colony_name}
+          </Typography>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Cancel</Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 

@@ -14,27 +14,45 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import authorsTableData from "layouts/tables/data/authorsTableData";
-import projectsTableData from "layouts/tables/data/projectsTableData";
+import birthcertificate from "layouts/tables/data/birthcertificate";
+import deathCertificate from "layouts/tables/data/deathcertificate";
 
-import RequestPopup from "../../examples/Popup/RequestPopup";
+import DeathRequestPopup from "../../examples/Popup/DeathRequestPopup";
+import BirthRequestPopup from "../../examples/Popup/BirthRequestPopup";
 
 function Tables() {
-  const [showDetails, setShowDetails] = useState(false);
-  const [detailData, setDetailData] = useState({});
+  const [showBirthDetails, setShowBirthDetails] = useState(false);
+  const [showDeathDetails, setShowDeathDetails] = useState(false);
+  const [birthDetailData, setBirthDetailData] = useState({});
+  const [deathDetailData, setDeathDetailData] = useState({});
 
-  const handleClick = (e, complaintData) => {
+  const handleBirthClick = (e, Data) => {
     e.preventDefault();
-    setShowDetails(true);
-    setDetailData(complaintData);
+    setShowBirthDetails(true);
+    setBirthDetailData(Data);
+  };
+  const handleDeathClick = (e, Data) => {
+    e.preventDefault();
+    setShowDeathDetails(true);
+    setDeathDetailData(Data);
+  };
+  const handleCloseBirth = () => {
+    setShowBirthDetails(false);
+  };
+  const handleCloseDeath = () => {
+    setShowDeathDetails(false);
+  };
+  const handleBirthSchedule = () => {
+    console.log("Appointment Scheduled for Birth Certificate");
+    handleCloseBirth();
+  };
+  const handleDeathSchedule = () => {
+    console.log("Appointment Scheduled for Death Certificate");
+    handleCloseDeath();
   };
 
-  const handleClose = () => {
-    setShowDetails(false);
-  };
-
-  const { columns, rows } = authorsTableData(handleClick);
-  const { columns: pColumns, rows: pRows } = projectsTableData(handleClick);
+  const { columns, rows } = birthcertificate(handleBirthClick);
+  const { columns: pColumns, rows: pRows } = deathCertificate(handleDeathClick);
 
   return (
     <>
@@ -99,7 +117,20 @@ function Tables() {
           </Grid>
         </MDBox>
       </DashboardLayout>
-      {showDetails && <RequestPopup detailData={detailData} handleClose={handleClose} />}
+      {showBirthDetails && (
+        <BirthRequestPopup
+          requestData={birthDetailData}
+          handleclose={handleCloseBirth}
+          handleSchedule={handleBirthSchedule}
+        />
+      )}
+      {showDeathDetails && (
+        <DeathRequestPopup
+          requestData={deathDetailData}
+          handleclose={handleCloseDeath}
+          handleSchedule={handleDeathSchedule}
+        />
+      )}
     </>
   );
 }

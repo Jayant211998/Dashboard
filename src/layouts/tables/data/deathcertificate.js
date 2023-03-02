@@ -1,7 +1,7 @@
 import React from "react";
-import deathRequestData from "./data.json";
+import deathRequestData from "./deathData.json";
 
-export default function data(handleClick) {
+export default function deathCertificate(handleClick) {
   const [tableData, setTableData] = React.useState([]);
 
   React.useState(() => {
@@ -9,7 +9,7 @@ export default function data(handleClick) {
   }, []);
 
   const TableContent = tableData.map((compData) => ({
-    requestId: compData.id,
+    requestId: compData.requestId,
     requester: compData.name,
     status: compData.status,
     date: compData.date,

@@ -29,7 +29,21 @@ function Projects() {
     setShowDetails(false);
   };
 
-  const { columns, rows } = data(handleClick);
+  const { columns, rows, assignees, tableData } = data(handleClick);
+
+  const [incidentData, setIncidentData] = useState(tableData);
+
+  const handleAssign = (id, name) => {
+    const newData = incidentData.map((incident) => {
+      if (incident.id === id) {
+        return { ...incident, assignedTo: name };
+      }
+      return incident;
+    });
+    setIncidentData(newData);
+    setShowDetails(false);
+  };
+  // console.log(incidentData);
 
   return (
     <>
@@ -65,7 +79,14 @@ function Projects() {
           />
         </MDBox>
       </Card>
-      {showDetails && <ComplaintPopup detailData={detailData} handleClose={handleClose} />}
+      {showDetails && (
+        <ComplaintPopup
+          detailData={detailData}
+          handleClose={handleClose}
+          assignees={assignees}
+          handleAssign={handleAssign}
+        />
+      )}
     </>
   );
 }

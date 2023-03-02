@@ -85,7 +85,7 @@ import dialogContentText from "assets/theme-dark/components/dialog/dialogContent
 import dialogActions from "assets/theme-dark/components/dialog/dialogActions";
 
 export default createTheme({
-  direction: "rtl",
+  direction: "",
   breakpoints: { ...breakpoints },
   palette: { ...colors },
   typography: { ...typography },
