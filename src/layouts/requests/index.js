@@ -14,17 +14,22 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import birthcertificate from "layouts/tables/data/birthcertificate";
-import deathCertificate from "layouts/tables/data/deathcertificate";
+import birthcertificate from "layouts/requests/data/birthcertificate";
+import deathCertificate from "layouts/requests/data/deathcertificate";
 
+import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
+import SuccessSnackbar from "examples/Snackbar/SuccessSnackbar";
 import DeathRequestPopup from "../../examples/Popup/DeathRequestPopup";
 import BirthRequestPopup from "../../examples/Popup/BirthRequestPopup";
 
-function Tables() {
+function Requests() {
   const [showBirthDetails, setShowBirthDetails] = useState(false);
   const [showDeathDetails, setShowDeathDetails] = useState(false);
   const [birthDetailData, setBirthDetailData] = useState({});
   const [deathDetailData, setDeathDetailData] = useState({});
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [text, setText] = useState("");
 
   const handleBirthClick = (e, Data) => {
     e.preventDefault();
@@ -42,13 +47,31 @@ function Tables() {
   const handleCloseDeath = () => {
     setShowDeathDetails(false);
   };
-  const handleBirthSchedule = () => {
-    console.log("Appointment Scheduled for Birth Certificate");
-    handleCloseBirth();
+  const handleBirthSchedule = (id, date) => {
+    if (date === "") {
+      setError(true);
+      setText("Please set date to Schedule Appointment.");
+    } else {
+      setSuccess(true);
+      setText("Appointment set Successfully.");
+      setShowBirthDetails(false);
+      console.log(id, date);
+      handleCloseBirth();
+      // Backend update id and set date
+    }
   };
-  const handleDeathSchedule = () => {
-    console.log("Appointment Scheduled for Death Certificate");
-    handleCloseDeath();
+  const handleDeathSchedule = (id, date) => {
+    if (date === "") {
+      setError(true);
+      setText("Please set date to Schedule Appointment.");
+    } else {
+      setSuccess(true);
+      setText("Appointment set Successfully.");
+      setShowDeathDetails(false);
+      console.log(id, date);
+      handleCloseDeath();
+      // Backend update id and set date
+    }
   };
 
   const { columns, rows } = birthcertificate(handleBirthClick);
@@ -120,19 +143,35 @@ function Tables() {
       {showBirthDetails && (
         <BirthRequestPopup
           requestData={birthDetailData}
-          handleclose={handleCloseBirth}
+          handleClose={handleCloseBirth}
           handleSchedule={handleBirthSchedule}
         />
       )}
       {showDeathDetails && (
         <DeathRequestPopup
           requestData={deathDetailData}
-          handleclose={handleCloseDeath}
+          handleClose={handleCloseDeath}
           handleSchedule={handleDeathSchedule}
+        />
+      )}
+      {error && (
+        <ErrorSnackbar
+          text={text}
+          handleClose={() => {
+            setError(false);
+          }}
+        />
+      )}
+      {success && (
+        <SuccessSnackbar
+          text={text}
+          handleClose={() => {
+            setSuccess(false);
+          }}
         />
       )}
     </>
   );
 }
 
-export default Tables;
+export default Requests;

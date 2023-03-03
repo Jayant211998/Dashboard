@@ -28,6 +28,8 @@ export default function data(handleClick) {
       <Switch
         checked={watersupplyData.status === "on"}
         onChange={() => handleSwitch(watersupplyData)}
+        color="primary"
+        // Backend all supplies checked where water supply is enabled
       />
     ),
   }));

@@ -11,23 +11,23 @@ import {
 
 import PropTypes from "prop-types";
 
-export default function EventsPopup({ handleClose, detailData }) {
+export default function SignupConfermationPopup({ handleClose, detailData }) {
   return (
     <Dialog open={detailData !== null} handleclose={handleClose}>
-      <DialogTitle>Event Created Successfully</DialogTitle>
+      <DialogTitle>Signup Successfull</DialogTitle>
       <DialogContent>
         <Typography variant="body2" color="text.secondary">
-          You have successfully Created Event - {detailData}
+          You have successfully signed up successfully.
         </Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>OK</Button>
+        <Button onClick={handleClose}>Cancel</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-EventsPopup.propTypes = {
-  detailData: PropTypes.string.isRequired,
+SignupConfermationPopup.propTypes = {
   handleClose: PropTypes.func.isRequired,
+  detailData: PropTypes.string.isRequired,
 };

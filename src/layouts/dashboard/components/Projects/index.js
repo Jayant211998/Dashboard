@@ -13,11 +13,16 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import data from "layouts/dashboard/components/Projects/data";
 import data1 from "layouts/dashboard/components/Projects/data/data.json";
+import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
+import SuccessSnackbar from "examples/Snackbar/SuccessSnackbar";
 import ComplaintPopup from "../../../../examples/Popup/ComplaintPopup";
 
 function Projects() {
   const [showDetails, setShowDetails] = useState(false);
   const [detailData, setDetailData] = useState({});
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [text, setText] = useState("");
 
   const handleClick = (e, complaintData) => {
     e.preventDefault();
@@ -29,21 +34,21 @@ function Projects() {
     setShowDetails(false);
   };
 
-  const { columns, rows, assignees, tableData } = data(handleClick);
-
-  const [incidentData, setIncidentData] = useState(tableData);
+  const { columns, rows, assignees } = data(handleClick);
 
   const handleAssign = (id, name) => {
-    const newData = incidentData.map((incident) => {
-      if (incident.id === id) {
-        return { ...incident, assignedTo: name };
-      }
-      return incident;
-    });
-    setIncidentData(newData);
-    setShowDetails(false);
+    if (name === "") {
+      setError(true);
+      setText("Complaint is not assigned as name was not provided.");
+    } else {
+      setSuccess(true);
+      setText("Complaint is assigned Successfully.");
+      console.log(id, name);
+      setShowDetails(false);
+      handleClose();
+      // Backend update name to particular id on backend
+    }
   };
-  // console.log(incidentData);
 
   return (
     <>
@@ -85,6 +90,22 @@ function Projects() {
           handleClose={handleClose}
           assignees={assignees}
           handleAssign={handleAssign}
+        />
+      )}
+      {error && (
+        <ErrorSnackbar
+          text={text}
+          handleClose={() => {
+            setError(false);
+          }}
+        />
+      )}
+      {success && (
+        <SuccessSnackbar
+          text={text}
+          handleClose={() => {
+            setSuccess(false);
+          }}
         />
       )}
     </>

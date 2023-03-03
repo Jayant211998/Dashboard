@@ -37,6 +37,5 @@ export default function data(handleClick) {
 
     rows: TableContent,
     assignees: assignees.names,
-    tableData: complainantData.data,
   };
 }

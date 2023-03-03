@@ -30,7 +30,7 @@ export default function WaterSupplyPopup({ handleClose, detailData }) {
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleClose}>OK</Button>
       </DialogActions>
     </Dialog>
   );

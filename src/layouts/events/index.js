@@ -3,19 +3,21 @@ import { Button, Grid, TextField } from "@mui/material";
 
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-
+import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 import EventsPopup from "../../examples/Popup/EventsPopup";
 
 function Events() {
-  const [eventImage, setEventImage] = useState(null);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+  const [eventImage, setEventImage] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [eventName, setEventName] = useState("");
   const [description, setDescription] = useState("");
   const [venue, setVenue] = useState("");
   const [popup, setPopup] = useState(false);
+  const [error, setError] = useState(false);
+  const [text, setText] = useState(false);
 
   const handleImageChange = (e) => {
     setEventImage(e.target.files[0]);
@@ -23,7 +25,31 @@ function Events() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setPopup(true);
+    if (startDate === "") {
+      setError(true);
+      setText("Please Enter Start date.");
+    } else if (endDate === "") {
+      setError(true);
+      setText("Please Enter End date.");
+    } else if (startTime === "") {
+      setError(true);
+      setText("Please Enter Start Time.");
+    } else if (endTime === "") {
+      setError(true);
+      setText("Please Enter End Time.");
+    } else if (eventName === "") {
+      setError(true);
+      setText("Please Enter Event Name.");
+    } else if (description === "") {
+      setError(true);
+      setText("Please Enter Event Description.");
+    } else if (venue === "") {
+      setError(true);
+      setText("Please Enter Event Venue.");
+    } else {
+      setPopup(true);
+      // Backend create new event entry
+    }
   };
 
   const handleClose = () => {
@@ -126,6 +152,14 @@ function Events() {
         </Grid>
       </DashboardLayout>
       {popup && <EventsPopup detailData={eventName} handleClose={handleClose} />}
+      {error && (
+        <ErrorSnackbar
+          text={text}
+          handleClose={() => {
+            setError(false);
+          }}
+        />
+      )}
     </>
   );
 }

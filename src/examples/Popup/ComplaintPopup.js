@@ -8,12 +8,12 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import PropTypes from "prop-types";
 
 export default function ComplaintPopup({ handleClose, detailData, assignees, handleAssign }) {
-  const [assignedTo, setAssignedTo] = React.useState(null);
+  const [assignedTo, setAssignedTo] = React.useState("");
 
   const handleAssigneeChange = (event, value) => {
     setAssignedTo(value);

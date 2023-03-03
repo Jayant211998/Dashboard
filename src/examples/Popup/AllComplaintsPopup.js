@@ -39,6 +39,7 @@ export default function AllComplaintsPopup({ handleClose, detailData }) {
           label="Description"
           value={detailData.description}
           disabled
+          multiline
         />
       </DialogContent>
       <DialogActions>

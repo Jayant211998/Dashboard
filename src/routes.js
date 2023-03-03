@@ -1,6 +1,6 @@
 import Dashboard from "layouts/dashboard";
 import WaterSupply from "layouts/watersupply";
-import Tables from "layouts/tables";
+import Requests from "layouts/requests";
 import Complaints from "layouts/complaints";
 import Events from "layouts/events";
 import Profile from "layouts/profile";
@@ -22,16 +22,16 @@ const routes = [
   {
     type: "collapse",
     name: "Request",
-    key: "tables",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    key: "Requests",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/request",
-    component: <Tables />,
+    component: <Requests />,
   },
   {
     type: "collapse",
     name: "Water Supply",
     key: "watersupply",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">local_drink</Icon>,
     route: "/watersupply",
     component: <WaterSupply />,
   },
@@ -39,7 +39,7 @@ const routes = [
     type: "collapse",
     name: "Complaints",
     key: "complaints",
-    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
+    icon: <Icon fontSize="small">description</Icon>,
     route: "/complaints",
     component: <Complaints />,
   },
@@ -47,7 +47,7 @@ const routes = [
     type: "collapse",
     name: "Events",
     key: "events",
-    icon: <Icon fontSize="small">notifications</Icon>,
+    icon: <Icon fontSize="small">diversity_3</Icon>,
     route: "/events",
     component: <Events />,
   },

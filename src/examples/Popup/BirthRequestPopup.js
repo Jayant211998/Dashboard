@@ -33,17 +33,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function BirthRequestPopup({ handleclose, requestData, handleSchedule }) {
+function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
   const classes = useStyles();
 
-  const [selectedDate, handleDateChange] = React.useState(new Date());
+  const [selectedDate, handleDateChange] = React.useState("");
 
   const handleChange = (e) => {
-    handleDateChange(e.value);
+    handleDateChange(e.target.value);
   };
 
   return (
-    <Dialog open={requestData !== null} handleclose={handleclose}>
+    <Dialog open={requestData !== null} onClose={handleClose}>
       <DialogTitle>Birth Certificate Request</DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
@@ -109,7 +109,6 @@ function BirthRequestPopup({ handleclose, requestData, handleSchedule }) {
               id="datetime-local"
               label="Next appointment"
               type="datetime-local"
-              defaultValue="22/04/22"
               value={selectedDate}
               className={classes.textField}
               onChange={handleChange}
@@ -121,12 +120,12 @@ function BirthRequestPopup({ handleclose, requestData, handleSchedule }) {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleclose}>Cancel</Button>
+        <Button onClick={handleClose}>Cancel</Button>
         <Button
           variant="contained"
           color="primary"
           style={{ color: "white" }}
-          onClick={handleSchedule}
+          onClick={() => handleSchedule(requestData.requestId, selectedDate)}
         >
           Schedule
         </Button>
@@ -148,7 +147,7 @@ BirthRequestPopup.propTypes = {
     address: PropTypes.string.isRequired,
     placeOfBirth: PropTypes.string.isRequired,
   }).isRequired,
-  handleclose: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
   handleSchedule: PropTypes.func.isRequired,
 };
 
