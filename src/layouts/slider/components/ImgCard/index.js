@@ -22,15 +22,14 @@ function ImgCard() {
   };
   return (
     <div
-      className="card"
       style={{
         backgroundImage: `url(${imageSrc})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        width: "50rem",
-        height: "20rem",
+        width: "90%",
+        height: "90%",
         margin: "2rem auto",
-        border: "1px solid black",
+        border: "0.1rem solid black",
         position: "relative",
       }}
     >
