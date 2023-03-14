@@ -43,6 +43,7 @@ function Dashboard() {
                 icon="description"
                 title="Complaints"
                 count={complaint}
+                route="/complaints"
                 percentage={{
                   color: "success",
                   amount: newComplaint,
@@ -58,6 +59,7 @@ function Dashboard() {
                 icon="receipt_long"
                 title="request"
                 count={request}
+                route="/request"
                 percentage={{
                   color: "success",
                   amount: newRequest,
@@ -72,6 +74,7 @@ function Dashboard() {
                 icon="local_drink"
                 title="Water Supply"
                 count={waterFlow}
+                route="/watersupply"
                 percentage={{
                   color: "success",
                   amount: newWaterFlow,
@@ -87,6 +90,7 @@ function Dashboard() {
                 icon="diversity_3"
                 title="Events"
                 count={events}
+                route="/events"
                 percentage={{
                   color: "success",
                   amount: newEvents,
