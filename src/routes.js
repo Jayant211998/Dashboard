@@ -3,6 +3,7 @@ import WaterSupply from "layouts/watersupply";
 import Requests from "layouts/requests";
 import Complaints from "layouts/complaints";
 import Events from "layouts/events";
+import Slider from "layouts/slider";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
@@ -58,6 +59,14 @@ const routes = [
     icon: <Icon fontSize="small">person</Icon>,
     route: "/profile",
     component: <Profile />,
+  },
+  {
+    type: "collapse",
+    name: "Slider",
+    key: "Slider",
+    icon: <Icon fontSize="small">image</Icon>,
+    route: "/slider",
+    component: <Slider />,
   },
   {
     type: "collapse",

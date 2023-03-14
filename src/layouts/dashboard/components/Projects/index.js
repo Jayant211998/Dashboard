@@ -2,7 +2,6 @@ import { useState } from "react";
 
 // @mui material components
 import Card from "@mui/material/Card";
-import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -12,7 +11,6 @@ import MDTypography from "components/MDTypography";
 import DataTable from "examples/Tables/DataTable";
 // Data
 import data from "layouts/dashboard/components/Projects/data";
-import data1 from "layouts/dashboard/components/Projects/data/data.json";
 import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 import SuccessSnackbar from "examples/Snackbar/SuccessSnackbar";
 import ComplaintPopup from "../../../../examples/Popup/ComplaintPopup";
@@ -58,20 +56,6 @@ function Projects() {
             <MDTypography variant="h6" gutterBottom>
               Complaint
             </MDTypography>
-            <MDBox display="flex" alignItems="center" lineHeight={0}>
-              <Icon
-                sx={{
-                  fontWeight: "bold",
-                  color: ({ palette: { info } }) => info.main,
-                  mt: -0.5,
-                }}
-              >
-                done
-              </Icon>
-              <MDTypography variant="button" fontWeight="regular" color="text">
-                &nbsp;<strong>Total Complaints {data1.totalcomplaints}</strong>
-              </MDTypography>
-            </MDBox>
           </MDBox>
         </MDBox>
         <MDBox>

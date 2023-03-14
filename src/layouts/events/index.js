@@ -20,7 +20,12 @@ function Events() {
   const [text, setText] = useState(false);
 
   const handleImageChange = (e) => {
-    setEventImage(e.target.files[0]);
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setEventImage(reader.result);
+    };
   };
 
   const handleSubmit = (e) => {
@@ -60,7 +65,21 @@ function Events() {
     <>
       <DashboardLayout>
         <DashboardNavbar />
-        {eventImage && <img src={eventImage} alt="Event" />}
+        {eventImage && (
+          <div
+            className="card"
+            style={{
+              backgroundImage: `url(${eventImage})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              width: "50rem",
+              height: "20rem",
+              margin: "2rem auto",
+              border: "1px solid black",
+              position: "relative",
+            }}
+          />
+        )}
         <Grid container spacing={2}>
           <br />
           <br />
