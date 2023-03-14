@@ -46,15 +46,34 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
     <Dialog open={requestData !== null} onClose={handleClose}>
       <DialogTitle>Birth Certificate Request</DialogTitle>
       <DialogContent>
+        <img
+          src={requestData.image1}
+          alt="Request 1"
+          className={classes.image}
+          style={{
+            width: "30rem",
+            height: "15rem",
+            border: "0.1rem solid black",
+            borderRadius: "0.5rem",
+            margin: "1rem",
+          }}
+        />
+        <br />
+        <img
+          src={requestData.image2}
+          alt="Request 2"
+          className={classes.image}
+          style={{
+            width: "30rem",
+            height: "15rem",
+            border: "0.1rem solid black",
+            borderRadius: "0.5rem",
+            margin: "1rem",
+          }}
+        />
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="subtitle1">Request Id: {requestData.requestId}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Grid container alignItems="center">
-              <img src={requestData.image1} alt="Request 1" className={classes.image} />
-              <img src={requestData.image2} alt="Request 2" className={classes.image} />
-            </Grid>
           </Grid>
           <Grid item xs={12}>
             <TextField

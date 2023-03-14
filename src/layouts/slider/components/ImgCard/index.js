@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
 import { Button } from "@material-ui/core";
 import Icon from "@mui/material/Icon";
+import PropTypes from "prop-types";
 
-function ImgCard() {
-  const [imageSrc, setImageSrc] = useState(null);
+function ImgCard({ image }) {
+  const [imageSrc, setImageSrc] = useState(image);
   const btnref = useRef();
 
   function handleImageChange(event) {
@@ -30,6 +31,7 @@ function ImgCard() {
         height: "90%",
         margin: "2rem auto",
         border: "0.1rem solid black",
+        borderRadius: "0.5rem",
         position: "relative",
       }}
     >
@@ -74,4 +76,8 @@ function ImgCard() {
     </div>
   );
 }
+
+ImgCard.propTypes = {
+  image: PropTypes.string.isRequired,
+};
 export default ImgCard;

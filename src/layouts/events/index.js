@@ -77,6 +77,7 @@ function Events() {
               margin: "2rem auto",
               border: "1px solid black",
               position: "relative",
+              borderRadius: "1rem",
             }}
           />
         )}

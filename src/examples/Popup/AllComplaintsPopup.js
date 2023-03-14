@@ -16,7 +16,16 @@ export default function AllComplaintsPopup({ handleClose, detailData }) {
     <Dialog open={detailData !== null} onClose={handleClose}>
       <DialogTitle>Incident Details</DialogTitle>
       <DialogContent>
-        <img src={detailData.image} alt="Incident" />
+        <img
+          src={detailData.image}
+          alt="Incident"
+          style={{
+            width: "33rem",
+            height: "15rem",
+            border: "0.1rem solid black",
+            borderRadius: "0.5rem",
+          }}
+        />
         <TextField fullWidth margin="normal" label="ID" value={detailData.id} disabled />
         <TextField
           fullWidth
