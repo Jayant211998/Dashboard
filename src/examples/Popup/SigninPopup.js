@@ -21,7 +21,7 @@ function SigninPopup({ handleClose, requestData, handleSubmitOTP }) {
   return (
     <Dialog open={requestData !== null} handleclose={handleClose}>
       <DialogTitle>Enter the OTP</DialogTitle>
-      <DialogContent>
+      <DialogContent style={{ width: "30rem" }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -33,6 +33,12 @@ function SigninPopup({ handleClose, requestData, handleSubmitOTP }) {
               value={selectedDate}
               onChange={handleChange}
             />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            Have not recived OTP on your mobile?
+            <Button>Resend OTP</Button>
           </Grid>
         </Grid>
       </DialogContent>

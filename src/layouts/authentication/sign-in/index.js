@@ -1,5 +1,4 @@
 // react-router-dom components
-import { Link } from "react-router-dom";
 import { useState } from "react";
 
 // @mui material components
@@ -75,21 +74,6 @@ function Basic() {
                 <MDButton variant="gradient" color="info" fullWidth onClick={() => handleClick()}>
                   sign in
                 </MDButton>
-              </MDBox>
-              <MDBox mt={3} mb={1} textAlign="center">
-                <MDTypography variant="button" color="text">
-                  Don&apos;t have an account?{" "}
-                  <MDTypography
-                    component={Link}
-                    to="/authentication/sign-up"
-                    variant="button"
-                    color="info"
-                    fontWeight="medium"
-                    textGradient
-                  >
-                    Sign up
-                  </MDTypography>
-                </MDTypography>
               </MDBox>
             </MDBox>
           </MDBox>
