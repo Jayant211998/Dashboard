@@ -1,12 +1,18 @@
 import React from "react";
 import birthRequestData from "./birthData.json";
+import birthRequestDataResoved from "./birthDataResolved.json";
+import birthRequestDataScheduled from "./birthDataScheduled.json";
 
-export default function birthcertificate(handleClick) {
-  const [tableData, setTableData] = React.useState([]);
+export default function birthcertificate(handleClick, value) {
+  let tableData = [];
 
-  React.useState(() => {
-    setTableData(birthRequestData.data);
-  }, []);
+  if (value === 0) {
+    tableData = birthRequestData.data;
+  } else if (value === 1) {
+    tableData = birthRequestDataScheduled.data;
+  } else {
+    tableData = birthRequestDataResoved.data;
+  }
 
   const TableContent = tableData.map((compData) => ({
     requestId: compData.requestId,
@@ -25,7 +31,6 @@ export default function birthcertificate(handleClick) {
       </button>
     ),
   }));
-
   return {
     columns: [
       { Header: "Request Id", accessor: "requestId", width: "20%", align: "left" },

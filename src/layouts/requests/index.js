@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -16,6 +19,7 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import birthcertificate from "layouts/requests/data/birthcertificate";
 import deathCertificate from "layouts/requests/data/deathcertificate";
+import breakpoints from "assets/theme/base/breakpoints";
 
 import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 import SuccessSnackbar from "examples/Snackbar/SuccessSnackbar";
@@ -30,6 +34,19 @@ function Requests() {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [text, setText] = useState("");
+  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
+  const [tabValue, setTabValue] = useState(0);
+
+  useEffect(() => {
+    function handleTabsOrientation() {
+      return window.innerWidth < breakpoints.values.sm
+        ? setTabsOrientation("vertical")
+        : setTabsOrientation("horizontal");
+    }
+    window.addEventListener("resize", handleTabsOrientation);
+    handleTabsOrientation();
+    return () => window.removeEventListener("resize", handleTabsOrientation);
+  }, [tabsOrientation]);
 
   const handleBirthClick = (e, Data) => {
     e.preventDefault();
@@ -73,14 +90,40 @@ function Requests() {
       // Backend update id and set date
     }
   };
+  const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
-  const { columns, rows } = birthcertificate(handleBirthClick);
-  const { columns: pColumns, rows: pRows } = deathCertificate(handleDeathClick);
+  const birthData = birthcertificate(handleBirthClick, tabValue);
+  const deathData = deathCertificate(handleDeathClick, tabValue);
+
+  const [bRow, setBRows] = useState([]);
+  const [dRow, setDRows] = useState([]);
+
+  useLayoutEffect(() => {
+    function getData() {
+      const bData = birthcertificate(handleBirthClick, tabValue);
+      const dData = deathCertificate(handleDeathClick, tabValue);
+      setBRows(bData.rows);
+      setDRows(dData.pRows);
+    }
+    getData();
+    // console.log(bRow, dRow);
+  }, [tabValue]);
 
   return (
     <>
       <DashboardLayout>
         <DashboardNavbar />
+        <Grid container spacing={3} alignItems="center">
+          <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+            <AppBar position="static">
+              <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
+                <Tab label="Pending" />
+                <Tab label="Scheduled" />
+                <Tab label="Resolved" />
+              </Tabs>
+            </AppBar>
+          </Grid>
+        </Grid>
         <MDBox pt={6} pb={3}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
@@ -101,7 +144,7 @@ function Requests() {
                 </MDBox>
                 <MDBox pt={3}>
                   <DataTable
-                    table={{ columns, rows }}
+                    table={{ columns: birthData.columns, rows: bRow }}
                     isSorted={false}
                     entriesPerPage={false}
                     showTotalEntries={false}
@@ -128,7 +171,7 @@ function Requests() {
                 </MDBox>
                 <MDBox pt={3}>
                   <DataTable
-                    table={{ columns: pColumns, rows: pRows }}
+                    table={{ columns: deathData.pColumns, rows: dRow }}
                     isSorted={false}
                     entriesPerPage={false}
                     showTotalEntries={false}

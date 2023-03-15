@@ -1,12 +1,17 @@
 import React from "react";
 import deathRequestData from "./deathData.json";
+import deathRequestDataResolved from "./deathDataResolved.json";
+import deathRequestDataScheduled from "./deathDataScheduled.json";
 
-export default function deathCertificate(handleClick) {
-  const [tableData, setTableData] = React.useState([]);
-
-  React.useState(() => {
-    setTableData(deathRequestData.data);
-  }, []);
+export default function deathCertificate(handleClick, value) {
+  let tableData = [];
+  if (value === 0) {
+    tableData = deathRequestData.data;
+  } else if (value === 1) {
+    tableData = deathRequestDataScheduled.data;
+  } else {
+    tableData = deathRequestDataResolved.data;
+  }
 
   const TableContent = tableData.map((compData) => ({
     requestId: compData.requestId,
@@ -27,7 +32,7 @@ export default function deathCertificate(handleClick) {
   }));
 
   return {
-    columns: [
+    pColumns: [
       { Header: "Request Id", accessor: "requestId", width: "20%", align: "left" },
       { Header: "Requester Name", accessor: "requester", width: "20%", align: "left" },
       { Header: "Date of Request", accessor: "date", align: "center" },
@@ -35,6 +40,6 @@ export default function deathCertificate(handleClick) {
       { Header: "See Details", accessor: "details", align: "center" },
     ],
 
-    rows: TableContent,
+    pRows: TableContent,
   };
 }

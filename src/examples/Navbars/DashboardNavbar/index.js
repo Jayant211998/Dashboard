@@ -21,7 +21,7 @@ import { navbar, navbarContainer, navbarRow } from "examples/Navbars/DashboardNa
 
 // Material Dashboard 2 React context
 import { useMaterialUIController, setTransparentNavbar } from "context";
-import { Button, Icon } from "@mui/material";
+// import { Button, Icon } from "@mui/material";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -65,13 +65,13 @@ function DashboardNavbar({ absolute, light, isMini }) {
         <MDBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
           <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} />
         </MDBox>
-        {window.innerWidth < 1030 && (
+        {/* {window.innerWidth < 1030 && (
           <MDBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
             <Button>
               <Icon>menu</Icon>
             </Button>
           </MDBox>
-        )}
+        )} */}
       </Toolbar>
     </AppBar>
   );
