@@ -12,6 +12,8 @@ import {
 import { makeStyles } from "@mui/styles";
 
 import PropTypes from "prop-types";
+import MDBox from "components/MDBox";
+import Card from "@mui/material/Card";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -46,31 +48,45 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
     <Dialog open={requestData !== null} onClose={handleClose}>
       <DialogTitle>Birth Certificate Request</DialogTitle>
       <DialogContent>
-        <img
-          src={requestData.image1}
-          alt="Request 1"
-          className={classes.image}
-          style={{
-            width: "30rem",
-            height: "15rem",
-            border: "0.1rem solid black",
-            borderRadius: "0.5rem",
-            margin: "1rem",
-          }}
-        />
+        <MDBox pt={6} pb={3}>
+          <Grid item xs={12}>
+            <Card style={{ height: "25rem" }}>
+              <div
+                style={{
+                  backgroundImage: `url(${requestData.image1})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  width: "90%",
+                  height: "90%",
+                  margin: "2rem auto",
+                  border: "0.1rem solid black",
+                  borderRadius: "0.5rem",
+                  position: "relative",
+                }}
+              />
+            </Card>
+          </Grid>
+        </MDBox>
         <br />
-        <img
-          src={requestData.image2}
-          alt="Request 2"
-          className={classes.image}
-          style={{
-            width: "30rem",
-            height: "15rem",
-            border: "0.1rem solid black",
-            borderRadius: "0.5rem",
-            margin: "1rem",
-          }}
-        />
+        <MDBox pt={6} pb={3}>
+          <Grid item xs={12}>
+            <Card style={{ height: "25rem" }}>
+              <div
+                style={{
+                  backgroundImage: `url(${requestData.image2})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  width: "90%",
+                  height: "90%",
+                  margin: "2rem auto",
+                  border: "0.1rem solid black",
+                  borderRadius: "0.5rem",
+                  position: "relative",
+                }}
+              />
+            </Card>
+          </Grid>
+        </MDBox>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="subtitle1">Request Id: {requestData.requestId}</Typography>
