@@ -15,9 +15,13 @@ function Events() {
   const [eventName, setEventName] = useState("");
   const [description, setDescription] = useState("");
   const [venue, setVenue] = useState("");
+  const [guest, setGuest] = useState("");
   const [popup, setPopup] = useState(false);
   const [error, setError] = useState(false);
   const [text, setText] = useState(false);
+  const [textFields, setTextFields] = useState([]);
+
+  console.log(textFields);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -51,6 +55,9 @@ function Events() {
     } else if (venue === "") {
       setError(true);
       setText("Please Enter Event Venue.");
+    } else if (guest === "") {
+      setError(true);
+      setText("Please Enter Number of People attending Event.");
     } else {
       setPopup(true);
       // Backend create new event entry
@@ -59,6 +66,24 @@ function Events() {
 
   const handleClose = () => {
     setPopup(false);
+  };
+
+  const handleAddTextField = () => {
+    const newTextField = { id: textFields.length, name: "", designation: "" };
+    setTextFields([...textFields, newTextField]);
+  };
+
+  const handleTextFieldChange = (event, id, property) => {
+    const updatedTextFields = textFields.map((textField) => {
+      if (textField.id === id && property === "name") {
+        return { ...textField, name: event.target.value };
+      }
+      if (textField.id === id && property === "designation") {
+        return { ...textField, designation: event.target.value };
+      }
+      return textField;
+    });
+    setTextFields(updatedTextFields);
   };
 
   return (
@@ -158,6 +183,43 @@ function Events() {
               multiline
             />
           </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              type="number"
+              label="Number Of Guests"
+              value={guest}
+              onChange={(e) => setGuest(e.target.value)}
+            />
+          </Grid>
+          {textFields.map((textField) => (
+            <Grid item xs={12} key={textField.id}>
+              <TextField
+                label="Cheif Guest"
+                type="text"
+                style={{ width: "48%" }}
+                value={textField.name || ""}
+                onChange={(event) => handleTextFieldChange(event, textField.id, "name")}
+              />
+              <TextField
+                label="Designation"
+                type="text"
+                style={{ width: "48%", marginLeft: "4%" }}
+                value={textField.designation || ""}
+                onChange={(event) => handleTextFieldChange(event, textField.id, "designation")}
+              />
+            </Grid>
+          ))}
+          <Grid item xs={12}>
+            <Button
+              type="button"
+              variant="contained"
+              onClick={handleAddTextField}
+              style={{ color: "white", width: "10rem" }}
+            >
+              Add text field
+            </Button>
+          </Grid>
           <br />
           <br />
           <br />
@@ -165,7 +227,7 @@ function Events() {
             type="button"
             variant="contained"
             onClick={handleSubmit}
-            style={{ color: "white", marginLeft: "0.8rem", width: "8rem" }}
+            style={{ color: "white", marginLeft: "1rem", width: "8rem" }}
           >
             Submit
           </Button>
