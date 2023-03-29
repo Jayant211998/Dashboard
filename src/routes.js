@@ -6,6 +6,7 @@ import Events from "layouts/events";
 import Slider from "layouts/slider";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
+import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -74,6 +75,14 @@ const routes = [
     icon: <Icon fontSize="small">logout</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
+  },
+  {
+    type: "collapse1",
+    name: "Sign Out",
+    key: "sign-up",
+    icon: <Icon fontSize="small">logout</Icon>,
+    route: "/authentication/sign-up",
+    component: <SignUp />,
   },
 ];
 

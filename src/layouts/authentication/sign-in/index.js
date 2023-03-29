@@ -3,6 +3,8 @@ import { useState } from "react";
 
 // @mui material components
 import { Card } from "@mui/material";
+import { Link } from "react-router-dom";
+// import axios from "axios";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -24,7 +26,7 @@ function Basic() {
   const [error, setError] = useState(false);
   const [errText, setErrText] = useState(false);
 
-  function handleClick() {
+  async function handleClick() {
     if (phone === "") {
       setError(true);
       setErrText("Please enter your Registered mobile number to login.");
@@ -34,6 +36,14 @@ function Basic() {
     } else {
       setPopup(true);
       // Backend
+      // const response = await axios.post('https://api.rausmartcity.com/login-admin/JDWedjsew94513ndjsd-ssg/secure', {
+      //   adminLogin: {
+      //       phoneNumber : phone,
+      //       role: "superAdmin",
+      //     },
+      //   }
+      // );
+      // console.log(response.data);
     }
   }
 
@@ -74,6 +84,21 @@ function Basic() {
                 <MDButton variant="gradient" color="info" fullWidth onClick={() => handleClick()}>
                   sign in
                 </MDButton>
+              </MDBox>
+              <MDBox mt={3} mb={1} textAlign="center">
+                <MDTypography variant="button" color="text">
+                  Don&apos;t have an account?{" "}
+                  <MDTypography
+                    component={Link}
+                    to="/authentication/sign-up"
+                    variant="button"
+                    color="info"
+                    fontWeight="medium"
+                    textGradient
+                  >
+                    Sign up
+                  </MDTypography>
+                </MDTypography>
               </MDBox>
             </MDBox>
           </MDBox>
