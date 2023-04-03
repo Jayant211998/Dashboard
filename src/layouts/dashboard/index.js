@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 import Grid from "@mui/material/Grid";
 import MDBox from "components/MDBox";
@@ -21,14 +23,66 @@ function Dashboard() {
   const [newEvents, setNewEvents] = useState(0);
 
   useEffect(() => {
-    setComplaint(281);
-    setNewComplaint(10);
-    setRequest(2300);
-    setNewRequest(3);
-    setwaterFlow(34000);
-    setNewWaterFlow(15);
-    setEvents(91);
-    setNewEvents(1);
+    const getData = async () => {
+      axios
+        .get("https://api.rausmartcity.com/get-all-user-complaints/secure", {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.body;
+          setComplaint(data.length);
+          const data1 = data.filter((comp) => comp.complaint.complaintStatus === "Pending");
+          setNewComplaint(data1.length);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      axios
+        .get("https://api.rausmartcity.com/get-all-user-requests/secure", {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.body;
+          setRequest(data.length);
+          const data1 = data.filter((req) => req.reuestData.requestStatus === "Pending");
+          setNewRequest(data1.length);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      axios
+        .get("https://api.rausmartcity.com/get-events/secure", {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.body;
+          setEvents(data.length);
+          const data1 = data.filter((event) => {
+            const createdDate = new Date(event.eventData.createdAt);
+            const currentDate = new Date();
+            return (
+              createdDate.getDate() === currentDate.getDate() &&
+              createdDate.getMonth() === currentDate.getMonth() &&
+              createdDate.getFullYear() === currentDate.getFullYear()
+            );
+          });
+          setNewEvents(data1.length);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    getData();
+    setwaterFlow(0);
+    setNewWaterFlow(0);
   }, []);
 
   return (
@@ -94,7 +148,7 @@ function Dashboard() {
                 percentage={{
                   color: "success",
                   amount: newEvents,
-                  label: "In this week",
+                  label: "recently created",
                 }}
               />
             </MDBox>

@@ -12,11 +12,6 @@ import MDBox from "components/MDBox";
 // Material Dashboard 2 React base styles
 
 function Header({ children }) {
-
-
-
-  console.log(tabValue);
-
   return (
     <MDBox position="relative" mb={5} style={{ marginTop: "7%" }}>
       <Card

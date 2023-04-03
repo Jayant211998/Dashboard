@@ -37,9 +37,7 @@ const useStyles = makeStyles(() => ({
 
 function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
   const classes = useStyles();
-
   const [selectedDate, handleDateChange] = React.useState("");
-
   const handleChange = (e) => {
     handleDateChange(e.target.value);
   };
@@ -53,7 +51,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
             <Card style={{ height: "25rem" }}>
               <div
                 style={{
-                  backgroundImage: `url(${requestData.image1})`,
+                  backgroundImage: `data:image/png;base64,${requestData.requestImages[0]}`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   width: "90%",
@@ -73,7 +71,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
             <Card style={{ height: "25rem" }}>
               <div
                 style={{
-                  backgroundImage: `url(${requestData.image2})`,
+                  backgroundImage: `data:image/png;base64,${requestData.requestImages[0]}`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   width: "90%",
@@ -89,27 +87,39 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
         </MDBox>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="subtitle1">Request Id: {requestData.requestId}</Typography>
+            <Typography variant="subtitle1">
+              Request Id: {requestData.reuestData.requestId}
+            </Typography>
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
               label="Date of Birth"
-              defaultValue={requestData.dateOfBirth}
+              defaultValue={requestData.reuestData.birthCertificate.dateOfBirth}
               disabled
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField fullWidth label="Gender" defaultValue={requestData.gender} disabled />
+            <TextField
+              fullWidth
+              label="Gender"
+              defaultValue={requestData.reuestData.birthCertificate.childGender}
+              disabled
+            />
           </Grid>
           <Grid item xs={12}>
-            <TextField fullWidth label="Child Name" defaultValue={requestData.childName} disabled />
+            <TextField
+              fullWidth
+              label="Child Name"
+              defaultValue={requestData.reuestData.birthCertificate.childNameEnglish}
+              disabled
+            />
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
               label="Fathers Name"
-              defaultValue={requestData.fathersName}
+              defaultValue={requestData.reuestData.birthCertificate.fathersName}
               disabled
             />
           </Grid>
@@ -117,7 +127,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
             <TextField
               fullWidth
               label="Mothers Name"
-              defaultValue={requestData.mothersName}
+              defaultValue={requestData.reuestData.birthCertificate.mothersName}
               disabled
             />
           </Grid>
@@ -125,7 +135,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
             <TextField
               fullWidth
               label="Place of Birth"
-              defaultValue={requestData.placeOfBirth}
+              defaultValue={requestData.reuestData.birthCertificate.placeOfBirth}
               multiline
               disabled
             />
@@ -134,7 +144,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
             <TextField
               fullWidth
               label="Address"
-              defaultValue={requestData.address}
+              defaultValue={requestData.reuestData.birthCertificate.address}
               multiline
               disabled
             />
@@ -160,7 +170,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
           variant="contained"
           color="primary"
           style={{ color: "white" }}
-          onClick={() => handleSchedule(requestData.requestId, selectedDate)}
+          onClick={() => handleSchedule(requestData.reuestData.requestId, selectedDate)}
         >
           Schedule
         </Button>
@@ -171,16 +181,19 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
 
 BirthRequestPopup.propTypes = {
   requestData: PropTypes.shape({
-    requestId: PropTypes.string.isRequired,
-    dateOfBirth: PropTypes.string.isRequired,
-    gender: PropTypes.string.isRequired,
-    image1: PropTypes.string.isRequired,
-    image2: PropTypes.string.isRequired,
-    childName: PropTypes.string.isRequired,
-    fathersName: PropTypes.string.isRequired,
-    mothersName: PropTypes.string.isRequired,
-    address: PropTypes.string.isRequired,
-    placeOfBirth: PropTypes.string.isRequired,
+    reuestData: PropTypes.shape({
+      requestId: PropTypes.string.isRequired,
+      birthCertificate: PropTypes.shape({
+        dateOfBirth: PropTypes.string.isRequired,
+        childGender: PropTypes.string.isRequired,
+        childNameEnglish: PropTypes.string.isRequired,
+        fathersName: PropTypes.string.isRequired,
+        mothersName: PropTypes.string.isRequired,
+        address: PropTypes.string.isRequired,
+        placeOfBirth: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+    requestImages: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
   handleClose: PropTypes.func.isRequired,
   handleSchedule: PropTypes.func.isRequired,

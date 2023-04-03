@@ -15,8 +15,10 @@ export default function data(handleClick) {
           },
         })
         .then((response) => {
-          console.log(response.data.body);
-          setTableData(response.data.body);
+          const data1 = response.data.body.filter(
+            (comp) => comp.complaint.complaintStatus === "Rejected"
+          );
+          setTableData(data1);
         })
         .catch((error) => {
           console.log(error);

@@ -17,7 +17,6 @@ export default function data(handleClick) {
           },
         })
         .then((response) => {
-          console.log(response.data.body);
           setTableData(response.data.body);
         })
         .catch((error) => {

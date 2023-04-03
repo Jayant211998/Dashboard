@@ -41,7 +41,6 @@ function Projects() {
     } else {
       setSuccess(true);
       setText("Complaint is assigned Successfully.");
-      console.log(id, name);
       setShowDetails(false);
       handleClose();
       // Backend update name to particular id on backend

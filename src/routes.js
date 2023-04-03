@@ -4,7 +4,7 @@ import Requests from "layouts/requests";
 import Complaints from "layouts/complaints";
 import Events from "layouts/events";
 import Slider from "layouts/slider";
-import Profile from "layouts/profile";
+// import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 
@@ -52,14 +52,14 @@ const routes = [
     route: "/events",
     component: <Events />,
   },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Profile",
+  //   key: "profile",
+  //   icon: <Icon fontSize="small">person</Icon>,
+  //   route: "/profile",
+  //   component: <Profile />,
+  // },
   {
     type: "collapse",
     name: "Slider",

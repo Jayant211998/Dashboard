@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Button, Grid, TextField } from "@mui/material";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -8,6 +10,7 @@ import EventsPopup from "../../examples/Popup/EventsPopup";
 
 function Events() {
   const [eventImage, setEventImage] = useState("");
+  const [eventImg, setEventImg] = useState(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -21,10 +24,9 @@ function Events() {
   const [text, setText] = useState(false);
   const [textFields, setTextFields] = useState([]);
 
-  console.log(textFields);
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    setEventImg(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -34,7 +36,10 @@ function Events() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (startDate === "") {
+    if (eventImg !== null) {
+      setError(true);
+      setText("Please Enter Start date.");
+    } else if (startDate === "") {
       setError(true);
       setText("Please Enter Start date.");
     } else if (endDate === "") {
@@ -59,8 +64,32 @@ function Events() {
       setError(true);
       setText("Please Enter Number of People attending Event.");
     } else {
-      setPopup(true);
-      // Backend create new event entry
+      const apiUrl = "https://api.rausmartcity.com/add-new-event/secure";
+      const headers = {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+        "Content-Type": "multipart/form-data",
+      };
+      const formData = new FormData();
+      formData.append("eventImage1", eventImg);
+      formData.append("eventName", eventName);
+      formData.append("startDate", startDate);
+      formData.append("endDate", endDate);
+      formData.append("startTime", startTime);
+      formData.append("endTime", endTime);
+      formData.append("description", description);
+      formData.append("venue", venue);
+      formData.append("peopleAttending", guest);
+      formData.append("guest", JSON.stringify(textFields));
+
+      axios
+        .post(apiUrl, formData, { headers })
+        .then((response) => {
+          console.log(response.data);
+          setPopup(true);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   };
 
@@ -69,14 +98,14 @@ function Events() {
   };
 
   const handleAddTextField = () => {
-    const newTextField = { id: textFields.length, name: "", designation: "" };
+    const newTextField = { id: textFields.length, guestName: "", designation: "" };
     setTextFields([...textFields, newTextField]);
   };
 
   const handleTextFieldChange = (event, id, property) => {
     const updatedTextFields = textFields.map((textField) => {
       if (textField.id === id && property === "name") {
-        return { ...textField, name: event.target.value };
+        return { ...textField, guestName: event.target.value };
       }
       if (textField.id === id && property === "designation") {
         return { ...textField, designation: event.target.value };
@@ -198,7 +227,7 @@ function Events() {
                 label="Cheif Guest"
                 type="text"
                 style={{ width: "48%" }}
-                value={textField.name || ""}
+                value={textField.guestName || ""}
                 onChange={(event) => handleTextFieldChange(event, textField.id, "name")}
               />
               <TextField

@@ -1,4 +1,6 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -17,8 +19,8 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import birthcertificate from "layouts/requests/data/birthcertificate";
-import deathCertificate from "layouts/requests/data/deathcertificate";
+// import birthcertificate from "layouts/requests/data/birthcertificate";
+// import deathCertificate from "layouts/requests/data/deathcertificate";
 import breakpoints from "assets/theme/base/breakpoints";
 
 import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
@@ -65,16 +67,37 @@ function Requests() {
     setShowDeathDetails(false);
   };
   const handleBirthSchedule = (id, date) => {
+    console.log("date", date);
     if (date === "") {
       setError(true);
       setText("Please set date to Schedule Appointment.");
     } else {
-      setSuccess(true);
-      setText("Appointment set Successfully.");
-      setShowBirthDetails(false);
-      console.log(id, date);
-      handleCloseBirth();
       // Backend update id and set date
+      axios
+        .patch(
+          `https://api.rausmartcity.com/update-user-requests/secure/${id}`,
+          {
+            documentVerificationDate: date.toString(),
+            requestStatus: "Scheduled",
+          },
+          {
+            // Request headers
+            headers: {
+              Authorization: `Bearer ${Cookies.get("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setSuccess(true);
+          setText("Appointment set Successfully.");
+          setShowBirthDetails(false);
+          handleCloseBirth();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
   const handleDeathSchedule = (id, date) => {
@@ -82,12 +105,32 @@ function Requests() {
       setError(true);
       setText("Please set date to Schedule Appointment.");
     } else {
-      setSuccess(true);
-      setText("Appointment set Successfully.");
-      setShowDeathDetails(false);
-      console.log(id, date);
-      handleCloseDeath();
       // Backend update id and set date
+      axios
+        .patch(
+          `https://api.rausmartcity.com/update-user-requests/secure/${id}`,
+          {
+            documentVerificationDate: date.toString(),
+            requestStatus: "Scheduled",
+          },
+          {
+            // Request headers
+            headers: {
+              Authorization: `Bearer ${Cookies.get("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setSuccess(true);
+          setText("Appointment set Successfully.");
+          setShowBirthDetails(false);
+          handleCloseDeath();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
@@ -97,18 +140,101 @@ function Requests() {
   const [bColumn, setBColumn] = useState([]);
   const [dColumn, setDColumn] = useState([]);
 
-  useLayoutEffect(() => {
-    async function getData() {
-      const bData = await birthcertificate(handleBirthClick, tabValue);
-      const dData = await deathCertificate(handleDeathClick, tabValue);
-      console.log(dData);
-      setBRows(bData.rows);
-      setDRows(dData.pRows);
-      setBColumn(bData.columns);
-      setDColumn(dData.pColumns);
+  function birthcertificate(handleClick, value, response) {
+    if (response.status === 200 || response.status === 201) {
+      const tableData = response.data.body.filter(
+        (req) =>
+          req.reuestData.requestType === "birthCertificate" &&
+          ((value === 0 && req.reuestData.requestStatus === "Pending") ||
+            (value === 1 && req.reuestData.requestStatus === "Scheduled") ||
+            (value === 2 && req.reuestData.requestStatus === "Resolved"))
+      );
+      const TableContent = tableData.map((compData) => ({
+        requestId: compData.reuestData.requestId,
+        requester: compData.reuestData.userName,
+        status: compData.reuestData.requestStatus,
+        date: compData.reuestData.createdAt.split("T")[0],
+        details: (
+          <button
+            type="button"
+            style={{ border: "none", background: "transparent" }}
+            onClick={(e) => {
+              handleClick(e, compData);
+            }}
+          >
+            Details
+          </button>
+        ),
+      }));
+      return TableContent;
     }
-    getData();
-    // console.log(bRow, dRow);
+    return [];
+  }
+  function deathCertificate(handleClick, value, response) {
+    if (response.status === 200 || response.status === 201) {
+      const tableData = response.data.body.filter(
+        (req) =>
+          req.reuestData.requestType === "deathCertificate" &&
+          ((value === 0 && req.reuestData.requestStatus === "Pending") ||
+            (value === 1 && req.reuestData.requestStatus === "Scheduled") ||
+            (value === 2 && req.reuestData.requestStatus === "Resolved"))
+      );
+      const TableContent = tableData.map((compData) => ({
+        requestId: compData.reuestData.requestId,
+        requester: compData.reuestData.userName,
+        status: compData.reuestData.requestStatus,
+        date: compData.reuestData.createdAt.split("T")[0],
+        details: (
+          <button
+            type="button"
+            style={{ border: "none", background: "transparent" }}
+            onClick={(e) => {
+              handleClick(e, compData);
+            }}
+          >
+            Details
+          </button>
+        ),
+      }));
+      return TableContent;
+    }
+    return [];
+  }
+
+  useEffect(() => {
+    function getapi() {
+      axios
+        .get("https://api.rausmartcity.com/get-all-user-requests/secure?page=2", {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          const bData = birthcertificate(handleBirthClick, tabValue, response);
+          const dData = deathCertificate(handleDeathClick, tabValue, response);
+          setBRows(bData);
+          setDRows(dData);
+          setBColumn([
+            { Header: "Request Id", accessor: "requestId", width: "20%", align: "left" },
+            { Header: "Requester Name", accessor: "requester", width: "20%", align: "left" },
+            { Header: "Date of Request", accessor: "date", align: "center" },
+            { Header: "Status", accessor: "status", align: "center" },
+            { Header: "See Details", accessor: "details", align: "center" },
+          ]);
+          setDColumn([
+            { Header: "Request Id", accessor: "requestId", width: "20%", align: "left" },
+            { Header: "Requester Name", accessor: "requester", width: "20%", align: "left" },
+            { Header: "Date of Request", accessor: "date", align: "center" },
+            { Header: "Status", accessor: "status", align: "center" },
+            { Header: "See Details", accessor: "details", align: "center" },
+          ]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    getapi();
   }, [tabValue]);
 
   return (

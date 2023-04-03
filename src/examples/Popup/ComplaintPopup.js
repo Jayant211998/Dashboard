@@ -14,7 +14,6 @@ import PropTypes from "prop-types";
 
 export default function ComplaintPopup({ handleClose, detailData, assignees, handleAssign }) {
   const [assignedTo, setAssignedTo] = React.useState("");
-
   const handleAssigneeChange = (event, value) => {
     setAssignedTo(value);
   };
@@ -23,7 +22,7 @@ export default function ComplaintPopup({ handleClose, detailData, assignees, han
       <DialogTitle>Incident Details</DialogTitle>
       <DialogContent>
         <img
-          src={detailData.image}
+          src={`data:image/png;base64,${detailData.complaintImage}`}
           alt="Incident"
           style={{
             width: "30rem",
@@ -33,26 +32,46 @@ export default function ComplaintPopup({ handleClose, detailData, assignees, han
             margin: "1rem",
           }}
         />
-        <TextField fullWidth margin="normal" label="ID" value={detailData.id} disabled />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="ID"
+          value={detailData.complaint.complaintId}
+          disabled
+        />
         <TextField
           fullWidth
           margin="normal"
           label="Incident"
-          value={detailData.complaint}
+          value={detailData.complaint.complaint.complaintName}
+          disabled
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Complaint Department"
+          value={detailData.complaint.complaint.department}
           disabled
         />
         <TextField
           fullWidth
           margin="normal"
           label="Reporter's Name"
-          value={detailData.complainant}
+          value={detailData.complaint.userName}
+          disabled
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Reporter's Address"
+          value={detailData.complaint.address}
           disabled
         />
         <TextField
           fullWidth
           margin="normal"
           label="Description"
-          value={detailData.description}
+          value={detailData.complaint.description}
           disabled
           multiline
         />
@@ -67,7 +86,10 @@ export default function ComplaintPopup({ handleClose, detailData, assignees, han
         <Button onClick={handleClose} color="primary">
           Close
         </Button>
-        <Button onClick={() => handleAssign(detailData.id, assignedTo)} color="primary">
+        <Button
+          onClick={() => handleAssign(detailData.complaint.complaintId, assignedTo)}
+          color="primary"
+        >
           Assign
         </Button>
       </DialogActions>
@@ -76,21 +98,20 @@ export default function ComplaintPopup({ handleClose, detailData, assignees, han
 }
 
 ComplaintPopup.propTypes = {
-  detailData: PropTypes.shape({
-    complaint: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    complainant: PropTypes.string.isRequired,
-  }).isRequired,
   assignees: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func.isRequired,
   handleAssign: PropTypes.func.isRequired,
+  detailData: PropTypes.shape({
+    complaint: PropTypes.shape({
+      complaintId: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      userName: PropTypes.string.isRequired,
+      address: PropTypes.string.isRequired,
+      complaint: PropTypes.shape({
+        complaintName: PropTypes.string.isRequired,
+        department: PropTypes.string.isRequired,
+      }),
+    }).isRequired,
+    complaintImage: PropTypes.string.isRequired,
+  }).isRequired,
 };
-
-// assignees: PropTypes.arrayOf(
-//   PropTypes.shape({
-//     id: PropTypes.number.isRequired,
-//     name: PropTypes.string.isRequired,
-//   })
-// ).isRequired,
