@@ -92,18 +92,20 @@ function Requests() {
   };
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
-  const birthData = birthcertificate(handleBirthClick, tabValue);
-  const deathData = deathCertificate(handleDeathClick, tabValue);
-
   const [bRow, setBRows] = useState([]);
   const [dRow, setDRows] = useState([]);
+  const [bColumn, setBColumn] = useState([]);
+  const [dColumn, setDColumn] = useState([]);
 
   useLayoutEffect(() => {
-    function getData() {
-      const bData = birthcertificate(handleBirthClick, tabValue);
-      const dData = deathCertificate(handleDeathClick, tabValue);
+    async function getData() {
+      const bData = await birthcertificate(handleBirthClick, tabValue);
+      const dData = await deathCertificate(handleDeathClick, tabValue);
+      console.log(dData);
       setBRows(bData.rows);
       setDRows(dData.pRows);
+      setBColumn(bData.columns);
+      setDColumn(dData.pColumns);
     }
     getData();
     // console.log(bRow, dRow);
@@ -144,7 +146,7 @@ function Requests() {
                 </MDBox>
                 <MDBox pt={3}>
                   <DataTable
-                    table={{ columns: birthData.columns, rows: bRow }}
+                    table={{ columns: bColumn, rows: bRow }}
                     isSorted={false}
                     entriesPerPage={false}
                     showTotalEntries={false}
@@ -171,7 +173,7 @@ function Requests() {
                 </MDBox>
                 <MDBox pt={3}>
                   <DataTable
-                    table={{ columns: deathData.pColumns, rows: dRow }}
+                    table={{ columns: dColumn, rows: dRow }}
                     isSorted={false}
                     entriesPerPage={false}
                     showTotalEntries={false}

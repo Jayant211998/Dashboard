@@ -1,6 +1,8 @@
 // react-router-dom components
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 // @mui material components
 import { Card } from "@mui/material";
@@ -24,36 +26,89 @@ function Cover() {
   const [popup, setPopup] = useState(false);
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [design, setdesign] = useState("");
+  const [depart, setdepart] = useState("");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [text, setText] = useState(false);
 
-  function handleClick() {
+  async function handleClick(event) {
+    event.preventDefault();
     if (phone === "") {
       setError(true);
       setText("Please enter your Mobile Number to Signup.");
     } else if (name === "") {
       setError(true);
       setText("Please enter your Name to Signup.");
-    } else if (email === "") {
+    } else if (design === "") {
+      setError(true);
+      setText("Please enter your Email to Signup.");
+    } else if (depart === "") {
       setError(true);
       setText("Please enter your Email to Signup.");
     } else if (phone.length !== 10) {
       setError(true);
       setText("Mobile Number should be of 10 digits.");
     } else {
-      setPopup(true);
       // Backend Send otp on phone and take data
+      try {
+        const response = await axios.post(
+          "https://api.rausmartcity.com/signup-admin/JDWedjsew94513ndjsd-ssg/secure",
+          {
+            adminSignup: {
+              adminName: name,
+              phoneNumber: phone,
+              designation: design,
+              department: depart,
+              role: "Admin",
+            },
+          }
+        );
+        setPopup(true);
+        Cookies.set("sessionId", response.data.body.sessionId);
+        Cookies.set("token", response.data.body.token);
+      } catch (err) {
+        if (err.response.status === 400) {
+          setError(true);
+          setText(`${err.response.data.message}: ${err.response.data.errors[0].body.message}`);
+        }
+      }
     }
   }
 
-  const handleSubmitOTP = (otp) => {
-    console.log(`Submitted OTP: ${otp}`);
-    setPopup(false);
-    setSuccess(true);
-    setText("Registration Successfull.");
+  const handleSubmitOTP = async (otp) => {
     // Backend check OTP
+    try {
+      // Backend Send otp on phone and take data
+      const response = await axios.post(
+        "https://api.rausmartcity.com/confirm-admin/JDWedjsew94513ndjsd-ssg/secure",
+        {
+          adminConfirm: {
+            sessionId: Cookies.get("sessionId"),
+            confirmCode: otp,
+            role: "Admin",
+            type: "signup",
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200 || response.status === 201) {
+        Cookies.set("token", response.data.body.token);
+        setSuccess(true);
+        setText("Registration Successfull.");
+      }
+    } catch (err) {
+      if (err.response.status === 400) {
+        setError(true);
+        setText(`${err.response.data.message}: ${err.response.data.errors[0].body.message}`);
+      }
+    }
+    setPopup(false);
   };
 
   return (
@@ -92,12 +147,22 @@ function Cover() {
               </MDBox>
               <MDBox mb={2}>
                 <MDInput
-                  type="email"
-                  label="Email"
+                  type="text"
+                  label="Designation"
                   variant="standard"
                   fullWidth
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
+                  onChange={(e) => setdesign(e.target.value)}
+                  value={design}
+                />
+              </MDBox>
+              <MDBox mb={2}>
+                <MDInput
+                  type="text"
+                  label="Department"
+                  variant="standard"
+                  fullWidth
+                  onChange={(e) => setdepart(e.target.value)}
+                  value={depart}
                 />
               </MDBox>
               <MDBox mb={2}>
@@ -111,7 +176,7 @@ function Cover() {
                 />
               </MDBox>
               <MDBox mt={4} mb={1}>
-                <MDButton variant="gradient" color="info" fullWidth onClick={() => handleClick()}>
+                <MDButton variant="gradient" color="info" fullWidth onClick={(e) => handleClick(e)}>
                   Register
                 </MDButton>
               </MDBox>

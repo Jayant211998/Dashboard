@@ -28,9 +28,8 @@ function SigninPopup({ handleClose, requestData, handleSubmitOTP }) {
               autoFocus
               margin="dense"
               label="Mobile OTP"
-              type="number"
+              type="text"
               fullWidth
-              value={selectedDate}
               onChange={handleChange}
             />
           </Grid>

@@ -1,19 +1,36 @@
 import React from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
 
-import complainantData from "./data.json";
+// import complainantData from "./data.json";
 import assignees from "./assignees.json";
 
 export default function data(handleClick) {
   const [tableData, setTableData] = React.useState([]);
 
-  React.useState(() => {
-    setTableData(complainantData.data);
+  React.useEffect(() => {
+    const getData = async () => {
+      axios
+        .get("https://api.rausmartcity.com/get-all-user-complaints/secure?$page=1", {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.body);
+          setTableData(response.data.body);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    getData();
   }, []);
 
   const TableContent = tableData.map((compData) => ({
-    complaint: compData.complaint,
-    complainant: compData.complainant,
-    date: compData.date,
+    complaint: compData.complaint.complaint.complaintName,
+    complainant: compData.complaint.userName,
+    date: compData.complaint.createdAt.split("T")[0],
     details: (
       <button
         type="button"

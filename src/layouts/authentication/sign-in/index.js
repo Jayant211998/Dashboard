@@ -4,7 +4,9 @@ import { useState } from "react";
 // @mui material components
 import { Card } from "@mui/material";
 import { Link } from "react-router-dom";
-// import axios from "axios";
+
+import axios from "axios";
+import Cookies from "js-cookie";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -34,21 +36,59 @@ function Basic() {
       setError(true);
       setErrText("Mobile Number should be of 10 digits.");
     } else {
-      setPopup(true);
-      // Backend
-      // const response = await axios.post('https://api.rausmartcity.com/login-admin/JDWedjsew94513ndjsd-ssg/secure', {
-      //   adminLogin: {
-      //       phoneNumber : phone,
-      //       role: "superAdmin",
-      //     },
-      //   }
-      // );
-      // console.log(response.data);
+      try {
+        const response = await axios.post(
+          "https://api.rausmartcity.com/login-admin/JDWedjsew94513ndjsd-ssg/secure",
+          {
+            adminLogin: {
+              phoneNumber: phone,
+              role: "Admin",
+            },
+          }
+        );
+        setPopup(true);
+        Cookies.set("sessionId", response.data.body.sessionId);
+        Cookies.set("token", response.data.body.token);
+      } catch (err) {
+        console.log(err.response.data);
+        if (err.response.status === 400) {
+          setError(true);
+          setErrText(`${err.response.data.message}: ${err.response.data.errors[0].body.message}`);
+        }
+      }
     }
   }
 
-  const handleSubmitOTP = (otp) => {
-    console.log(`Submitted OTP: ${otp}`);
+  const handleSubmitOTP = async (otp) => {
+    try {
+      // Backend Send otp on phone and take data
+      const response = await axios.post(
+        "https://api.rausmartcity.com/confirm-admin/JDWedjsew94513ndjsd-ssg/secure",
+        {
+          adminConfirm: {
+            sessionId: Cookies.get("sessionId"),
+            confirmCode: otp,
+            role: "Admin",
+            type: "login",
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200 || response.status === 201) {
+        Cookies.set("token", response.data.body.token);
+        window.location.href = "/dashboard";
+      }
+    } catch (err) {
+      if (err.response.status === 400) {
+        setError(true);
+        setErrText(`${err.response.data.message}: ${err.response.data.errors[0].body.message}`);
+      }
+    }
     setPopup(false);
   };
   return (
