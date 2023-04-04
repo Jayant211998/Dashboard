@@ -1,12 +1,15 @@
 import React, { useState, useRef } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { Button } from "@material-ui/core";
 import Icon from "@mui/material/Icon";
 import PropTypes from "prop-types";
 
-function ImgCard({ image, index, handleImage }) {
+function ImgCard({ image, handleAddImage }) {
   const [imageSrc, setImageSrc] = useState(image);
   const [type, setType] = useState("base64");
   const btnref = useRef();
+
   function handleImageChange(event) {
     setType("url");
     const file = event.target.files[0];
@@ -14,7 +17,7 @@ function ImgCard({ image, index, handleImage }) {
     reader.readAsDataURL(file);
     reader.onload = () => {
       setImageSrc(reader.result);
-      handleImage(reader.result, index);
+      handleAddImage(file);
     };
   }
   const handleEdit = () => {
@@ -22,6 +25,21 @@ function ImgCard({ image, index, handleImage }) {
   };
   const handleDelete = () => {
     setImageSrc(null);
+    const url = `https://api.rausmartcity.com/delete-user-slider/secure/id`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    axios
+      .delete(url, config)
+      .then((response) => {
+        console.log("Response from API:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error from API:", error);
+      });
   };
   return (
     <div
@@ -39,26 +57,28 @@ function ImgCard({ image, index, handleImage }) {
       }}
     >
       <div>
-        <Button
-          type="button"
-          onClick={handleEdit}
-          style={{
-            position: "absolute",
-            right: "0",
-            top: "0",
-            backgroundColor: "black",
-            color: "white",
-          }}
-        >
-          <Icon fontSize="small">{imageSrc === null ? "upload" : "edit"}</Icon>
-        </Button>
+        {imageSrc === null && (
+          <Button
+            type="button"
+            onClick={handleEdit}
+            style={{
+              position: "absolute",
+              right: "0",
+              top: "0",
+              backgroundColor: "black",
+              color: "white",
+            }}
+          >
+            <Icon fontSize="small">upload</Icon>
+          </Button>
+        )}
         {imageSrc !== null && (
           <Button
             type="button"
             onClick={handleDelete}
             style={{
               position: "absolute",
-              right: "3rem",
+              right: "0",
               top: "0",
               backgroundColor: "black",
               color: "white",
@@ -82,7 +102,6 @@ function ImgCard({ image, index, handleImage }) {
 
 ImgCard.propTypes = {
   image: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  handleImage: PropTypes.func.isRequired,
+  handleAddImage: PropTypes.func.isRequired,
 };
 export default ImgCard;

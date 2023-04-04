@@ -14,6 +14,9 @@ import ImgCard from "./components/ImgCard";
 
 function Slider() {
   const [imgList, setImgList] = React.useState([]);
+  const [image, setImage] = React.useState(null);
+  // const [newCard, setNewCard] = React.useState("inactive");
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
 
   React.useEffect(() => {
     axios
@@ -31,43 +34,37 @@ function Slider() {
         // handle error
         console.error(error);
       });
-  }, []);
+  }, [isSubmitted]);
 
   const handleSubmit = () => {
-    imgList.forEach((image) => {
-      const url = "https://api.rausmartcity.com/add-user-slider/secure";
-      const formData = new FormData();
-      formData.append("sliderImage", image);
-      formData.append("title", "titleValue");
-      formData.append("description", "descriptionValue");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`,
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      axios
-        .post(url, formData, config)
-        .then((response) => {
-          console.log("Response from API:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error from API:", error);
-        });
-    });
+    const url = "https://api.rausmartcity.com/add-user-slider/secure";
+    const formData = new FormData();
+    formData.append("sliderImage", image);
+    formData.append("title", "titleValue");
+    formData.append("description", "descriptionValue");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    axios
+      .post(url, formData, config)
+      .then(() => {
+        setIsSubmitted(!isSubmitted);
+      })
+      .catch((error) => {
+        console.error("Error from API:", error);
+      });
   };
 
-  const handleImage = (img, id) => {
-    setImgList((prevList) => {
-      const newList = prevList;
-      newList[id] = img;
-      return newList;
-    });
+  const handleAddImage = (img) => {
+    setImage(img);
   };
 
   const cards = imgList.map((img, id) => (
     <Card style={{ height: "25rem" }}>
-      <ImgCard image={img} index={id} handleImage={handleImage} />
+      <ImgCard image={img} index={id} handleAddImage={handleAddImage} />
     </Card>
   ));
 
@@ -77,9 +74,16 @@ function Slider() {
       <MDBox pt={6} pb={3}>
         <Grid item xs={12}>
           {cards}
-          <Card style={{ height: "25rem" }}>
-            <ImgCard image={null} index={imgList.length} handleImage={handleImage} />
-          </Card>
+          {isSubmitted && (
+            <Card style={{ height: "25rem" }}>
+              <ImgCard image={null} handleAddImage={handleAddImage} />
+            </Card>
+          )}
+          {!isSubmitted && (
+            <Card style={{ height: "25rem" }}>
+              <ImgCard image={null} handleAddImage={handleAddImage} />
+            </Card>
+          )}
         </Grid>
       </MDBox>
       <Button
