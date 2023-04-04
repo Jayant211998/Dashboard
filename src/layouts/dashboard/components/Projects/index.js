@@ -69,6 +69,33 @@ function Projects() {
     }
   };
 
+  const handleReject = (id) => {
+    axios
+      .patch(
+        `https://api.rausmartcity.com/update-user-complaints/secure/${id}`,
+        {
+          complaintStatus: "Rejected",
+        },
+        {
+          // Request headers
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(() => {
+        setSuccess(true);
+        setText("Complaint is Rejected Successfully.");
+        setShowDetails(false);
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // Backend update name to particular id on backend
+  };
+
   return (
     <>
       <Card>
@@ -95,6 +122,7 @@ function Projects() {
           handleClose={handleClose}
           assignees={assignees}
           handleAssign={handleAssign}
+          handleReject={handleReject}
         />
       )}
       {error && (

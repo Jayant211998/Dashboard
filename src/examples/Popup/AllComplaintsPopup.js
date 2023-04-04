@@ -1,6 +1,13 @@
 import React from "react";
 
-import { Dialog, DialogTitle, DialogContent, TextField } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
+  Button,
+} from "@mui/material";
 
 import PropTypes from "prop-types";
 
@@ -64,6 +71,11 @@ export default function ComplaintPopup({ handleClose, detailData }) {
           multiline
         />
       </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Close
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 }
