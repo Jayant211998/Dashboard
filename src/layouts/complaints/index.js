@@ -55,7 +55,7 @@ function Complaints() {
                   coloredShadow="info"
                 >
                   <MDTypography variant="h6" color="white">
-                    Resolved Complaints
+                    Rejected Complaints
                   </MDTypography>
                 </MDBox>
                 <MDBox pt={3}>
@@ -82,7 +82,7 @@ function Complaints() {
                   coloredShadow="info"
                 >
                   <MDTypography variant="h6" color="white">
-                    Rejected Complaints
+                    Resolved Complaints
                   </MDTypography>
                 </MDBox>
                 <MDBox pt={3}>

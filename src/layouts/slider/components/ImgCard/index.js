@@ -3,16 +3,18 @@ import { Button } from "@material-ui/core";
 import Icon from "@mui/material/Icon";
 import PropTypes from "prop-types";
 
-function ImgCard({ image }) {
+function ImgCard({ image, index, handleImage }) {
   const [imageSrc, setImageSrc] = useState(image);
+  const [type, setType] = useState("base64");
   const btnref = useRef();
-
   function handleImageChange(event) {
+    setType("url");
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       setImageSrc(reader.result);
+      handleImage(reader.result, index);
     };
   }
   const handleEdit = () => {
@@ -24,7 +26,8 @@ function ImgCard({ image }) {
   return (
     <div
       style={{
-        backgroundImage: `url(${imageSrc})`,
+        backgroundImage:
+          type === "url" ? `url(${imageSrc})` : `url(data:image/png;base64,${imageSrc})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         width: "90%",
@@ -79,5 +82,7 @@ function ImgCard({ image }) {
 
 ImgCard.propTypes = {
   image: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+  handleImage: PropTypes.func.isRequired,
 };
 export default ImgCard;

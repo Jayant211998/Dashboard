@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -39,10 +41,30 @@ function Projects() {
       setError(true);
       setText("Complaint is not assigned as name was not provided.");
     } else {
-      setSuccess(true);
-      setText("Complaint is assigned Successfully.");
-      setShowDetails(false);
-      handleClose();
+      axios
+        .patch(
+          `https://api.rausmartcity.com/update-user-complaints/secure/${id}`,
+          {
+            assignedTo: name,
+            complaintStatus: "Resolved",
+          },
+          {
+            // Request headers
+            headers: {
+              Authorization: `Bearer ${Cookies.get("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then(() => {
+          setSuccess(true);
+          setText("Complaint is assigned Successfully.");
+          setShowDetails(false);
+          handleClose();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       // Backend update name to particular id on backend
     }
   };

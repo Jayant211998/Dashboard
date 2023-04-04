@@ -204,7 +204,7 @@ function Requests() {
   useEffect(() => {
     function getapi() {
       axios
-        .get("https://api.rausmartcity.com/get-all-user-requests/secure?page=2", {
+        .get("https://api.rausmartcity.com/get-all-user-requests/secure?page=1", {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
             "Content-Type": "application/json",

@@ -52,14 +52,6 @@ const routes = [
     route: "/events",
     component: <Events />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Profile",
-  //   key: "profile",
-  //   icon: <Icon fontSize="small">person</Icon>,
-  //   route: "/profile",
-  //   component: <Profile />,
-  // },
   {
     type: "collapse",
     name: "Slider",

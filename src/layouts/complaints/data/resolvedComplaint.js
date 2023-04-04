@@ -16,7 +16,7 @@ export default function data(handleClick) {
         })
         .then((response) => {
           const data1 = response.data.body.filter(
-            (comp) => comp.complaint.complaintStatus === "Resolved"
+            (comp) => comp.complaint.complaintStatus === "resolved"
           );
           setTableData(data1);
         })
