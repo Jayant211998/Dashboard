@@ -1,6 +1,6 @@
 import React from "react";
 
-import Autocomplete from "@mui/material/Autocomplete";
+// import Autocomplete from "@mui/material/Autocomplete";
 import {
   Button,
   Dialog,
@@ -15,13 +15,13 @@ import PropTypes from "prop-types";
 export default function ComplaintPopup({
   handleClose,
   detailData,
-  assignees,
+  // assignees,
   handleAssign,
   handleReject,
 }) {
   const [assignedTo, setAssignedTo] = React.useState("");
-  const handleAssigneeChange = (event, value) => {
-    setAssignedTo(value);
+  const handleAssigneeChange = (event) => {
+    setAssignedTo(event.target.value);
   };
   return (
     <Dialog open={detailData !== null} onClose={handleClose}>
@@ -81,24 +81,39 @@ export default function ComplaintPopup({
           disabled
           multiline
         />
-        <Autocomplete
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Assign To"
+          onChange={handleAssigneeChange}
+          value={assignedTo}
+          multiline
+        />
+        {/* <Autocomplete
           options={assignees}
           getOptionLabel={(option) => option}
           onChange={handleAssigneeChange}
           renderInput={(params) => <TextField {...params} label="Assign To" margin="normal" />}
-        />
+        /> */}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">
           Close
         </Button>
         <Button
-          onClick={() => handleAssign(detailData.complaint.complaintId, assignedTo)}
+          onClick={() => {
+            handleAssign(detailData.complaint.complaintId, assignedTo);
+          }}
           color="primary"
         >
           Assign
         </Button>
-        <Button onClick={() => handleReject(detailData.complaint.complaintId)} color="primary">
+        <Button
+          onClick={() => {
+            handleReject(detailData.complaint.complaintId);
+          }}
+          color="primary"
+        >
           Reject
         </Button>
       </DialogActions>
@@ -107,7 +122,7 @@ export default function ComplaintPopup({
 }
 
 ComplaintPopup.propTypes = {
-  assignees: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // assignees: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func.isRequired,
   handleAssign: PropTypes.func.isRequired,
   handleReject: PropTypes.func.isRequired,

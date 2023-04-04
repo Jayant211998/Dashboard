@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -38,6 +38,7 @@ function Requests() {
   const [text, setText] = useState("");
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
+  const [responseData, setResponseData] = useState([]);
 
   useEffect(() => {
     function handleTabsOrientation() {
@@ -211,6 +212,7 @@ function Requests() {
           },
         })
         .then((response) => {
+          setResponseData(response);
           const bData = birthcertificate(handleBirthClick, tabValue, response);
           const dData = deathCertificate(handleDeathClick, tabValue, response);
           setBRows(bData);
@@ -235,8 +237,27 @@ function Requests() {
         });
     }
     getapi();
+  }, []);
+  useLayoutEffect(() => {
+    const bData = birthcertificate(handleBirthClick, tabValue, responseData);
+    const dData = deathCertificate(handleDeathClick, tabValue, responseData);
+    setBRows(bData);
+    setDRows(dData);
+    setBColumn([
+      { Header: "Request Id", accessor: "requestId", width: "20%", align: "left" },
+      { Header: "Requester Name", accessor: "requester", width: "20%", align: "left" },
+      { Header: "Date of Request", accessor: "date", align: "center" },
+      { Header: "Status", accessor: "status", align: "center" },
+      { Header: "See Details", accessor: "details", align: "center" },
+    ]);
+    setDColumn([
+      { Header: "Request Id", accessor: "requestId", width: "20%", align: "left" },
+      { Header: "Requester Name", accessor: "requester", width: "20%", align: "left" },
+      { Header: "Date of Request", accessor: "date", align: "center" },
+      { Header: "Status", accessor: "status", align: "center" },
+      { Header: "See Details", accessor: "details", align: "center" },
+    ]);
   }, [tabValue]);
-
   return (
     <>
       <DashboardLayout>
