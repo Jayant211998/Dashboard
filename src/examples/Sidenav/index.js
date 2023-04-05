@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 // react-router-dom components
 import { useLocation, NavLink } from "react-router-dom";
@@ -15,7 +17,7 @@ import Icon from "@mui/material/Icon";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-// import MDButton from "components/MDButton";
+import { Button } from "@material-ui/core";
 
 // Material Dashboard 2 React example components
 import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
@@ -73,6 +75,28 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
     let returnValue;
 
+    const handleLogout = () => {
+      const endpoint = "https://api.rausmartcity.com/logout-admin/JDWedjsew94513ndjsd-ssg/secure";
+
+      const headers = {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      };
+
+      axios
+        .post(endpoint, {}, { headers })
+        .then((response) => {
+          // handle successful response
+          console.log(response.data);
+          Cookies.remove("token");
+          Cookies.remove("sessionId");
+          window.location.replace("/authentication/sign-in");
+        })
+        .catch((err) => {
+          // handle error
+          console.error(err);
+        });
+    };
+
     if (type === "collapse") {
       returnValue = href ? (
         <Link
@@ -120,6 +144,16 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             (darkMode && !transparentSidenav && whiteSidenav)
           }
         />
+      );
+    }
+    if (type === "logout") {
+      returnValue = (
+        <Button
+          style={{ color: "white", marginLeft: "5.5rem", marginTop: "10rem" }}
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
       );
     }
 

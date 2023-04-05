@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 import Dashboard from "layouts/dashboard";
 import WaterSupply from "layouts/watersupply";
 import Requests from "layouts/requests";
@@ -18,7 +20,7 @@ const routes = [
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
-    component: <Dashboard />,
+    component: Cookies.get("token") ? <Dashboard /> : <SignIn />,
   },
   {
     type: "collapse",
@@ -26,7 +28,7 @@ const routes = [
     key: "Requests",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/request",
-    component: <Requests />,
+    component: Cookies.get("token") ? <Requests /> : <SignIn />,
   },
   {
     type: "collapse",
@@ -34,7 +36,7 @@ const routes = [
     key: "watersupply",
     icon: <Icon fontSize="small">local_drink</Icon>,
     route: "/watersupply",
-    component: <WaterSupply />,
+    component: Cookies.get("token") ? <WaterSupply /> : <SignIn />,
   },
   {
     type: "collapse",
@@ -42,7 +44,7 @@ const routes = [
     key: "complaints",
     icon: <Icon fontSize="small">description</Icon>,
     route: "/complaints",
-    component: <Complaints />,
+    component: Cookies.get("token") ? <Complaints /> : <SignIn />,
   },
   {
     type: "collapse",
@@ -50,18 +52,19 @@ const routes = [
     key: "events",
     icon: <Icon fontSize="small">diversity_3</Icon>,
     route: "/events",
-    component: <Events />,
+    component: Cookies.get("token") ? <Events /> : <SignIn />,
   },
+
   {
     type: "collapse",
     name: "Slider",
     key: "Slider",
     icon: <Icon fontSize="small">image</Icon>,
     route: "/slider",
-    component: <Slider />,
+    component: Cookies.get("token") ? <Slider /> : <SignIn />,
   },
   {
-    type: "collapse",
+    type: "logout",
     name: "Sign Out",
     key: "sign-in",
     icon: <Icon fontSize="small">logout</Icon>,
