@@ -5,10 +5,14 @@ import Cookies from "js-cookie";
 
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+
 import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
+import traceAndThrow from "../../utils/Errors";
+
 import EventsPopup from "../../examples/Popup/EventsPopup";
 
 function Events() {
+  const [error, setError] = useState(false);
   const [eventImage, setEventImage] = useState("");
   const [eventImg, setEventImg] = useState(null);
   const [startDate, setStartDate] = useState("");
@@ -20,7 +24,6 @@ function Events() {
   const [venue, setVenue] = useState("");
   const [guest, setGuest] = useState("");
   const [popup, setPopup] = useState(false);
-  const [error, setError] = useState(false);
   const [text, setText] = useState(false);
   const [disable, setDisable] = useState(false);
   const [textFields, setTextFields] = useState([]);
@@ -37,10 +40,7 @@ function Events() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (eventImg === null) {
-      setError(true);
-      setText("Please Upload Event Image.");
-    } else if (startDate === "") {
+    if (startDate === "") {
       setError(true);
       setText("Please Enter Start date.");
     } else if (endDate === "") {
@@ -93,7 +93,10 @@ function Events() {
           setDisable(false);
         })
         .catch((err) => {
-          console.error(err);
+          // console.error(err);
+          setDisable(false);
+          setError(true);
+          setText(traceAndThrow(err));
         });
     }
   };

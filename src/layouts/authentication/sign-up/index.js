@@ -16,8 +16,9 @@ import MDButton from "components/MDButton";
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import SignupPopup from "examples/Popup/SignupPopup";
-import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 import SuccessSnackbar from "examples/Snackbar/SuccessSnackbar";
+import traceAndThrow from "utils/Errors";
+import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 
 // Images
 import bgImage from "assets/images/rajwada.jpg";
@@ -68,10 +69,8 @@ function Cover() {
         Cookies.set("sessionId", response.data.body.sessionId);
         Cookies.set("token", response.data.body.token);
       } catch (err) {
-        if (err.response.status === 400) {
-          setError(true);
-          setText(`${err.response.data.message}: ${err.response.data.errors[0].body.message}`);
-        }
+        setError(true);
+        setText(traceAndThrow(err));
       }
     }
   }
@@ -105,10 +104,10 @@ function Cover() {
     } catch (err) {
       if (err.response.status === 400 && err.response.data.errors[0].body.message) {
         setError(true);
-        setText(`${err.response.data.message}: ${err.response.data.errors[0].body.message}`);
+        setText(traceAndThrow(err));
       } else if (err.response.status === 400 && err.response.data.errors[0].body.Details) {
         setError(true);
-        setText(`${err.response.data.message}: ${err.response.data.errors[0].body.Details}`);
+        setText(traceAndThrow(err));
       }
     }
     setPopup(false);

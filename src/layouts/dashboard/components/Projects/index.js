@@ -13,8 +13,9 @@ import MDTypography from "components/MDTypography";
 import DataTable from "examples/Tables/DataTable";
 // Data
 import data from "layouts/dashboard/components/Projects/data";
-import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 import SuccessSnackbar from "examples/Snackbar/SuccessSnackbar";
+import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
+import traceAndThrow from "utils/Errors";
 import ComplaintPopup from "../../../../examples/Popup/ComplaintPopup";
 
 function Projects() {
@@ -63,7 +64,8 @@ function Projects() {
           handleClose();
         })
         .catch((err) => {
-          console.log(err);
+          setError(true);
+          setText(traceAndThrow(err));
         });
       // Backend update name to particular id on backend
     }
@@ -91,7 +93,8 @@ function Projects() {
         handleClose();
       })
       .catch((err) => {
-        console.log(err);
+        setError(true);
+        setText(traceAndThrow(err));
       });
     // Backend update name to particular id on backend
   };

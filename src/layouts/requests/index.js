@@ -19,10 +19,9 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-// import birthcertificate from "layouts/requests/data/birthcertificate";
-// import deathCertificate from "layouts/requests/data/deathcertificate";
 import breakpoints from "assets/theme/base/breakpoints";
 
+import traceAndThrow from "utils/Errors";
 import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 import SuccessSnackbar from "examples/Snackbar/SuccessSnackbar";
 import DeathRequestPopup from "../../examples/Popup/DeathRequestPopup";
@@ -90,7 +89,8 @@ function Requests() {
         setShowDeathDetails(false);
       })
       .catch((err) => {
-        console.log(err);
+        setError(true);
+        setText(traceAndThrow(err));
       });
   };
   const handleSchedule = (id, date) => {
@@ -122,7 +122,8 @@ function Requests() {
           setShowDeathDetails(false);
         })
         .catch((err) => {
-          console.log(err);
+          setError(true);
+          setText(traceAndThrow(err));
         });
     }
   };
@@ -225,7 +226,8 @@ function Requests() {
           ]);
         })
         .catch((err) => {
-          console.log(err);
+          setError(true);
+          setText(traceAndThrow(err));
         });
     }
     getapi();

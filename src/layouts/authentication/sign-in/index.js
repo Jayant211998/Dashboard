@@ -17,16 +17,17 @@ import MDButton from "components/MDButton";
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
+import traceAndThrow from "utils/Errors";
 import SigninPopup from "examples/Popup/SigninPopup";
 
 // Images
 import bgImage from "assets/images/rajwada.jpg";
 
 function Basic() {
-  const [popup, setPopup] = useState(false);
-  const [phone, setPhone] = useState("");
   const [error, setError] = useState(false);
   const [errText, setErrText] = useState(false);
+  const [popup, setPopup] = useState(false);
+  const [phone, setPhone] = useState("");
 
   async function handleClick() {
     if (phone === "") {
@@ -50,14 +51,8 @@ function Basic() {
         Cookies.set("sessionId", response.data.body.sessionId);
         Cookies.set("token", response.data.body.token);
       } catch (err) {
-        console.log(err);
-        if (err.response.status === 400 && err.response.data.errors[0].body.message) {
-          setError(true);
-          setErrText(`${err.response.data.message}: ${err.response.data.errors[0].body.message}`);
-        } else if (err.response.status === 400 && err.response.data.errors[0].body.Details) {
-          setError(true);
-          setErrText(`${err.response.data.message}: ${err.response.data.errors[0].body.Details}`);
-        }
+        setError(true);
+        setErrText(traceAndThrow(err));
       }
     }
   }
@@ -87,10 +82,8 @@ function Basic() {
         window.location.href = "/dashboard";
       }
     } catch (err) {
-      if (err.response.status === 400) {
-        setError(true);
-        setErrText(`${err.response.data.message}: ${err.response.data.errors[0].body.message}`);
-      }
+      setError(true);
+      setErrText(traceAndThrow(err));
     }
     setPopup(false);
   };
