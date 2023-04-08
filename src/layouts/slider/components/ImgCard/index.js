@@ -4,8 +4,12 @@ import Cookies from "js-cookie";
 import { Button } from "@material-ui/core";
 import Icon from "@mui/material/Icon";
 import PropTypes from "prop-types";
+import traceAndThrow from "utils/Errors";
+import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 
 function ImgCard({ image, index, handleAddImage, handleRemoveImage }) {
+  const [error, setError] = useState(false);
+  const [errText, setErrText] = useState(false);
   const [imageSrc, setImageSrc] = useState(image);
   const [type, setType] = useState("base64");
   const btnref = useRef();
@@ -38,8 +42,9 @@ function ImgCard({ image, index, handleAddImage, handleRemoveImage }) {
       .then((response) => {
         console.log("Response from API:", response.data);
       })
-      .catch((error) => {
-        console.error("Error from API:", error);
+      .catch((err) => {
+        setError(true);
+        setErrText(traceAndThrow(err));
       });
   };
   return (
@@ -97,6 +102,14 @@ function ImgCard({ image, index, handleAddImage, handleRemoveImage }) {
           style={{ display: "none" }}
         />
       </div>
+      {error && (
+        <ErrorSnackbar
+          text={errText}
+          handleClose={() => {
+            setError(false);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -1,6 +1,9 @@
 const traceAndThrow = (err: any) => {
+  if (err.message === "Network Error") {
+    return "Network Error";
+  }
   console.log("error.message", err && err.message);
-  console.log("error", err.response.data);
+  console.log("error", err);
   const error = err.response.data;
   if (error && error.errors && error.errors.length) {
     const { label, body } = error && error.errors[0];

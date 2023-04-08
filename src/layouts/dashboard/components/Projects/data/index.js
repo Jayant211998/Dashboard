@@ -13,13 +13,16 @@ export default function data(handleClick) {
   React.useEffect(() => {
     const getData = async () => {
       axios
-        .get("https://api.rausmartcity.com/get-all-user-complaints/secure?$page=1", {
+        .get("https://api.rausmartcity.com/get-all-user-complaints/secure", {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
           },
         })
         .then((response) => {
-          setTableData(response.data.body);
+          const data1 = response.data.body.filter(
+            (comp) => comp.complaint.complaintStatus === "Pending"
+          );
+          setTableData(data1);
         })
         .catch((err) => {
           setError(true);
@@ -62,7 +65,7 @@ export default function data(handleClick) {
         { Header: "See Details", accessor: "details", align: "center" },
       ],
 
-      rows: TableContent,
+      rows: tableData.length > 0 ? TableContent : [],
     }
   );
 }

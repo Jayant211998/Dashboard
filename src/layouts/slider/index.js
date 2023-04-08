@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -9,10 +9,14 @@ import Button from "@mui/material/Button";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDBox from "components/MDBox";
+import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
+import traceAndThrow from "utils/Errors";
 
 import ImgCard from "./components/ImgCard";
 
 function Slider() {
+  const [error, setError] = useState(false);
+  const [errText, setErrText] = useState(false);
   const [imgList, setImgList] = React.useState([]);
   const [image, setImage] = React.useState(null);
   // const [newCard, setNewCard] = React.useState("inactive");
@@ -30,9 +34,10 @@ function Slider() {
         const images = response.data.body.map((img) => img.sliderImage);
         setImgList(images);
       })
-      .catch((error) => {
+      .catch((err) => {
         // handle error
-        console.error(error);
+        setError(true);
+        setErrText(traceAndThrow(err));
       });
   }, [isSubmitted, imgList]);
 
@@ -53,8 +58,9 @@ function Slider() {
       .then(() => {
         setIsSubmitted(!isSubmitted);
       })
-      .catch((error) => {
-        console.error("Error from API:", error);
+      .catch((err) => {
+        setError(true);
+        setErrText(traceAndThrow(err));
       });
   };
 
@@ -80,42 +86,52 @@ function Slider() {
   ));
 
   return (
-    <DashboardLayout>
-      <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
-        <Grid item xs={12}>
-          {cards}
-          {isSubmitted && (
-            <Card style={{ height: "25rem" }}>
-              <ImgCard
-                image={null}
-                index={-1}
-                handleAddImage={handleAddImage}
-                handleRemoveImage={handleRemoveImage}
-              />
-            </Card>
-          )}
-          {!isSubmitted && (
-            <Card style={{ height: "25rem" }}>
-              <ImgCard
-                image={null}
-                index={-1}
-                handleAddImage={handleAddImage}
-                handleRemoveImage={handleRemoveImage}
-              />
-            </Card>
-          )}
-        </Grid>
-      </MDBox>
-      <Button
-        type="button"
-        variant="contained"
-        onClick={handleSubmit}
-        style={{ color: "white", marginLeft: "1rem", width: "8rem" }}
-      >
-        Submit
-      </Button>
-    </DashboardLayout>
+    <>
+      <DashboardLayout>
+        <DashboardNavbar />
+        <MDBox pt={6} pb={3}>
+          <Grid item xs={12}>
+            {cards}
+            {isSubmitted && (
+              <Card style={{ height: "25rem" }}>
+                <ImgCard
+                  image={null}
+                  index={-1}
+                  handleAddImage={handleAddImage}
+                  handleRemoveImage={handleRemoveImage}
+                />
+              </Card>
+            )}
+            {!isSubmitted && (
+              <Card style={{ height: "25rem" }}>
+                <ImgCard
+                  image={null}
+                  index={-1}
+                  handleAddImage={handleAddImage}
+                  handleRemoveImage={handleRemoveImage}
+                />
+              </Card>
+            )}
+          </Grid>
+        </MDBox>
+        <Button
+          type="button"
+          variant="contained"
+          onClick={handleSubmit}
+          style={{ color: "white", marginLeft: "1rem", width: "8rem" }}
+        >
+          Submit
+        </Button>
+      </DashboardLayout>
+      {error && (
+        <ErrorSnackbar
+          text={errText}
+          handleClose={() => {
+            setError(false);
+          }}
+        />
+      )}
+    </>
   );
 }
 
