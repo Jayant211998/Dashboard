@@ -50,10 +50,13 @@ function Basic() {
         Cookies.set("sessionId", response.data.body.sessionId);
         Cookies.set("token", response.data.body.token);
       } catch (err) {
-        console.log(err.response.data);
-        if (err.response.status === 400) {
+        console.log(err);
+        if (err.response.status === 400 && err.response.data.errors[0].body.message) {
           setError(true);
           setErrText(`${err.response.data.message}: ${err.response.data.errors[0].body.message}`);
+        } else if (err.response.status === 400 && err.response.data.errors[0].body.Details) {
+          setError(true);
+          setErrText(`${err.response.data.message}: ${err.response.data.errors[0].body.Details}`);
         }
       }
     }

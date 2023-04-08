@@ -103,9 +103,12 @@ function Cover() {
         setText("Registration Successfull.");
       }
     } catch (err) {
-      if (err.response.status === 400) {
+      if (err.response.status === 400 && err.response.data.errors[0].body.message) {
         setError(true);
         setText(`${err.response.data.message}: ${err.response.data.errors[0].body.message}`);
+      } else if (err.response.status === 400 && err.response.data.errors[0].body.Details) {
+        setError(true);
+        setText(`${err.response.data.message}: ${err.response.data.errors[0].body.Details}`);
       }
     }
     setPopup(false);

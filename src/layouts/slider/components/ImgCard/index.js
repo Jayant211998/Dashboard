@@ -5,7 +5,7 @@ import { Button } from "@material-ui/core";
 import Icon from "@mui/material/Icon";
 import PropTypes from "prop-types";
 
-function ImgCard({ image, handleAddImage }) {
+function ImgCard({ image, index, handleAddImage, handleRemoveImage }) {
   const [imageSrc, setImageSrc] = useState(image);
   const [type, setType] = useState("base64");
   const btnref = useRef();
@@ -24,8 +24,9 @@ function ImgCard({ image, handleAddImage }) {
     btnref.current.click();
   };
   const handleDelete = () => {
+    handleRemoveImage(index);
     setImageSrc(null);
-    const url = `https://api.rausmartcity.com/delete-user-slider/secure/id`;
+    const url = `https://api.rausmartcity.com/delete-user-slider/secure/${index}`;
     const config = {
       headers: {
         Authorization: `Bearer ${Cookies.get("token")}`,
@@ -102,6 +103,8 @@ function ImgCard({ image, handleAddImage }) {
 
 ImgCard.propTypes = {
   image: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
   handleAddImage: PropTypes.func.isRequired,
+  handleRemoveImage: PropTypes.func.isRequired,
 };
 export default ImgCard;

@@ -22,6 +22,7 @@ function Events() {
   const [popup, setPopup] = useState(false);
   const [error, setError] = useState(false);
   const [text, setText] = useState(false);
+  const [disable, setDisable] = useState(false);
   const [textFields, setTextFields] = useState([]);
 
   const handleImageChange = (e) => {
@@ -36,9 +37,9 @@ function Events() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (eventImg !== null) {
+    if (eventImg === null) {
       setError(true);
-      setText("Please Enter Start date.");
+      setText("Please Upload Event Image.");
     } else if (startDate === "") {
       setError(true);
       setText("Please Enter Start date.");
@@ -51,9 +52,12 @@ function Events() {
     } else if (endTime === "") {
       setError(true);
       setText("Please Enter End Time.");
-    } else if (eventName === "") {
+    } else if (new Date(startDate) < new Date() || new Date(endDate) < new Date()) {
       setError(true);
-      setText("Please Enter Event Name.");
+      setText("Please Enter Future Date.");
+    } else if (new Date(startDate) > new Date(endDate)) {
+      setError(true);
+      setText("End Date should be Greater than Start Date.");
     } else if (description === "") {
       setError(true);
       setText("Please Enter Event Description.");
@@ -64,6 +68,8 @@ function Events() {
       setError(true);
       setText("Please Enter Number of People attending Event.");
     } else {
+      // console.log("passed", startDate, endDate, new Date());
+      setDisable(true);
       const apiUrl = "https://api.rausmartcity.com/add-new-event/secure";
       const headers = {
         Authorization: `Bearer ${Cookies.get("token")}`,
@@ -80,12 +86,11 @@ function Events() {
       formData.append("venue", venue);
       formData.append("peopleAttending", guest);
       formData.append("guest", JSON.stringify(textFields));
-
       axios
         .post(apiUrl, formData, { headers })
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           setPopup(true);
+          setDisable(false);
         })
         .catch((err) => {
           console.error(err);
@@ -253,6 +258,7 @@ function Events() {
           <br />
           <br />
           <Button
+            disabled={disable}
             type="button"
             variant="contained"
             onClick={handleSubmit}

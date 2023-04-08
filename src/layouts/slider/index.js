@@ -34,7 +34,7 @@ function Slider() {
         // handle error
         console.error(error);
       });
-  }, [isSubmitted]);
+  }, [isSubmitted, imgList]);
 
   const handleSubmit = () => {
     const url = "https://api.rausmartcity.com/add-user-slider/secure";
@@ -62,9 +62,20 @@ function Slider() {
     setImage(img);
   };
 
+  const handleRemoveImage = (index) => {
+    if (index > -1) {
+      setImgList(imgList.splice(index, 1));
+    }
+  };
+
   const cards = imgList.map((img, id) => (
     <Card style={{ height: "25rem" }}>
-      <ImgCard image={img} index={id} handleAddImage={handleAddImage} />
+      <ImgCard
+        image={img}
+        index={id}
+        handleAddImage={handleAddImage}
+        handleRemoveImage={handleRemoveImage}
+      />
     </Card>
   ));
 
@@ -76,12 +87,22 @@ function Slider() {
           {cards}
           {isSubmitted && (
             <Card style={{ height: "25rem" }}>
-              <ImgCard image={null} handleAddImage={handleAddImage} />
+              <ImgCard
+                image={null}
+                index={-1}
+                handleAddImage={handleAddImage}
+                handleRemoveImage={handleRemoveImage}
+              />
             </Card>
           )}
           {!isSubmitted && (
             <Card style={{ height: "25rem" }}>
-              <ImgCard image={null} handleAddImage={handleAddImage} />
+              <ImgCard
+                image={null}
+                index={-1}
+                handleAddImage={handleAddImage}
+                handleRemoveImage={handleRemoveImage}
+              />
             </Card>
           )}
         </Grid>
