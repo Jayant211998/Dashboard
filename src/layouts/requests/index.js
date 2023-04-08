@@ -67,41 +67,33 @@ function Requests() {
   const handleCloseDeath = () => {
     setShowDeathDetails(false);
   };
-  const handleBirthSchedule = (id, date) => {
-    console.log("date", date);
-    if (date === "") {
-      setError(true);
-      setText("Please set date to Schedule Appointment.");
-    } else {
-      // Backend update id and set date
-      axios
-        .patch(
-          `https://api.rausmartcity.com/update-user-requests/secure/${id}`,
-          {
-            documentVerificationDate: date.toString(),
-            requestStatus: "Scheduled",
+  const handleResolved = (id) => {
+    axios
+      .patch(
+        `https://api.rausmartcity.com/update-user-requests/secure/${id}`,
+        {
+          requestStatus: "Resolved",
+        },
+        {
+          // Request headers
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "application/json",
           },
-          {
-            // Request headers
-            headers: {
-              Authorization: `Bearer ${Cookies.get("token")}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          setSuccess(true);
-          setText("Appointment set Successfully.");
-          setShowBirthDetails(false);
-          handleCloseBirth();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        setSuccess(true);
+        setText("Request Resolved.");
+        setShowBirthDetails(false);
+        setShowDeathDetails(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  const handleDeathSchedule = (id, date) => {
+  const handleSchedule = (id, date) => {
     if (date === "") {
       setError(true);
       setText("Please set date to Schedule Appointment.");
@@ -127,7 +119,7 @@ function Requests() {
           setSuccess(true);
           setText("Appointment set Successfully.");
           setShowBirthDetails(false);
-          handleCloseDeath();
+          setShowDeathDetails(false);
         })
         .catch((err) => {
           console.log(err);
@@ -205,7 +197,7 @@ function Requests() {
   useEffect(() => {
     function getapi() {
       axios
-        .get("https://api.rausmartcity.com/get-all-user-requests/secure?page=1", {
+        .get("https://api.rausmartcity.com/get-all-user-requests/secure?page=2", {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
             "Content-Type": "application/json",
@@ -336,14 +328,16 @@ function Requests() {
         <BirthRequestPopup
           requestData={birthDetailData}
           handleClose={handleCloseBirth}
-          handleSchedule={handleBirthSchedule}
+          handleSchedule={handleSchedule}
+          handleResolved={handleResolved}
         />
       )}
       {showDeathDetails && (
         <DeathRequestPopup
           requestData={deathDetailData}
           handleClose={handleCloseDeath}
-          handleSchedule={handleDeathSchedule}
+          handleSchedule={handleSchedule}
+          handleResolved={handleResolved}
         />
       )}
       {error && (

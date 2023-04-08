@@ -149,9 +149,12 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     if (type === "logout") {
       returnValue = (
         <Button
-          style={{ color: "white", marginLeft: "5.5rem", marginTop: "10rem" }}
+          style={{ color: "white", marginLeft: "4.8rem", marginTop: "10rem" }}
           onClick={handleLogout}
         >
+          <Icon fontSize="small" style={{ marginRight: "0.2rem" }}>
+            logout
+          </Icon>
           Logout
         </Button>
       );

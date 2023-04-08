@@ -12,8 +12,6 @@ import {
 import { makeStyles } from "@mui/styles";
 
 import PropTypes from "prop-types";
-import MDBox from "components/MDBox";
-import Card from "@mui/material/Card";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -35,7 +33,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
+function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleResolved }) {
   const classes = useStyles();
   const [selectedDate, handleDateChange] = React.useState("");
   const handleChange = (e) => {
@@ -46,45 +44,29 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
     <Dialog open={requestData !== null} onClose={handleClose}>
       <DialogTitle>Birth Certificate Request</DialogTitle>
       <DialogContent>
-        <MDBox pt={6} pb={3}>
-          <Grid item xs={12}>
-            <Card style={{ height: "25rem" }}>
-              <div
-                style={{
-                  backgroundImage: `data:image/png;base64,${requestData.requestImages[0]}`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  width: "90%",
-                  height: "90%",
-                  margin: "2rem auto",
-                  border: "0.1rem solid black",
-                  borderRadius: "0.5rem",
-                  position: "relative",
-                }}
-              />
-            </Card>
-          </Grid>
-        </MDBox>
+        <img
+          src={`data:image/png;base64,${requestData.requestImages[0]}`}
+          alt="Incident"
+          style={{
+            width: "30rem",
+            height: "15rem",
+            border: "0.1rem solid black",
+            borderRadius: "0.5rem",
+            margin: "1rem",
+          }}
+        />
         <br />
-        <MDBox pt={6} pb={3}>
-          <Grid item xs={12}>
-            <Card style={{ height: "25rem" }}>
-              <div
-                style={{
-                  backgroundImage: `data:image/png;base64,${requestData.requestImages[0]}`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  width: "90%",
-                  height: "90%",
-                  margin: "2rem auto",
-                  border: "0.1rem solid black",
-                  borderRadius: "0.5rem",
-                  position: "relative",
-                }}
-              />
-            </Card>
-          </Grid>
-        </MDBox>
+        <img
+          src={`data:image/png;base64,${requestData.requestImages[1]}`}
+          alt="Incident"
+          style={{
+            width: "30rem",
+            height: "15rem",
+            border: "0.1rem solid black",
+            borderRadius: "0.5rem",
+            margin: "1rem",
+          }}
+        />
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="subtitle1">
@@ -151,10 +133,16 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              fullWidth
+              disabled={requestData.reuestData.requestStatus !== "Pending"}
               id="datetime-local"
-              label="Next appointment"
+              label="Appointment Date"
               type="datetime-local"
-              value={selectedDate}
+              value={
+                requestData.reuestData.requestStatus !== "Pending"
+                  ? requestData.reuestData.documentVerificationDate
+                  : selectedDate
+              }
               className={classes.textField}
               onChange={handleChange}
               InputLabelProps={{
@@ -166,14 +154,26 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ color: "white" }}
-          onClick={() => handleSchedule(requestData.reuestData.requestId, selectedDate)}
-        >
-          Schedule
-        </Button>
+        {requestData.reuestData.requestStatus === "Pending" && (
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ color: "white" }}
+            onClick={() => handleSchedule(requestData.reuestData.requestId, selectedDate)}
+          >
+            Schedule
+          </Button>
+        )}
+        {requestData.reuestData.requestStatus === "Scheduled" && (
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ color: "white" }}
+            onClick={() => handleResolved(requestData.reuestData.requestId)}
+          >
+            Resolved
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
@@ -182,7 +182,9 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule }) {
 BirthRequestPopup.propTypes = {
   requestData: PropTypes.shape({
     reuestData: PropTypes.shape({
+      requestStatus: PropTypes.string.isRequired,
       requestId: PropTypes.string.isRequired,
+      documentVerificationDate: PropTypes.string.isRequired,
       birthCertificate: PropTypes.shape({
         dateOfBirth: PropTypes.string.isRequired,
         childGender: PropTypes.string.isRequired,
@@ -197,6 +199,7 @@ BirthRequestPopup.propTypes = {
   }).isRequired,
   handleClose: PropTypes.func.isRequired,
   handleSchedule: PropTypes.func.isRequired,
+  handleResolved: PropTypes.func.isRequired,
 };
 
 export default BirthRequestPopup;

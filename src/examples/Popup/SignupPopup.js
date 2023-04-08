@@ -30,17 +30,16 @@ function SignupPopup({ handleClose, requestData, handleSubmitOTP }) {
               label="Mobile OTP"
               type="text"
               fullWidth
-              value={selectedDate}
               onChange={handleChange}
             />
           </Grid>
         </Grid>
-        <Grid container spacing={2}>
+        {/* <Grid container spacing={2}>
           <Grid item xs={12}>
             Have not recived OTP on your mobile?
             <Button>Resend OTP</Button>
           </Grid>
-        </Grid>
+        </Grid> */}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Close</Button>
