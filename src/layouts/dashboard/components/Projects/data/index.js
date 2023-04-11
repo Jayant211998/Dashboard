@@ -36,6 +36,7 @@ export default function data(handleClick) {
     complaint: compData.complaint.complaint.complaintName,
     complainant: compData.complaint.userName,
     date: compData.complaint.createdAt.split("T")[0],
+    status: "Pending",
     details: (
       <button
         type="button"

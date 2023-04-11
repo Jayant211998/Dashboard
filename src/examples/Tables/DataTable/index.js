@@ -189,7 +189,18 @@ function DataTable({
           {page.map((row, key) => {
             prepareRow(row);
             return (
-              <TableRow {...row.getRowProps()}>
+              <TableRow
+                style={{
+                  backgroundColor:
+                    row.original.status &&
+                    ((new Date().getTime() - new Date(row.values.date).getTime()) /
+                      (1000 * 3600 * 24) >=
+                    2
+                      ? "red"
+                      : "yellow"),
+                }}
+                {...row.getRowProps()}
+              >
                 {row.cells.map((cell) => (
                   <DataTableBodyCell
                     noBorder={noEndBorder && rows.length - 1 === key}

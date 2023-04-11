@@ -35,8 +35,7 @@ function Projects() {
     setShowDetails(false);
   };
 
-  const { columns, rows, assignees } = data(handleClick);
-
+  const { columns, rows } = data(handleClick);
   const handleAssign = (id, name) => {
     if (name === "") {
       setError(true);
@@ -123,7 +122,6 @@ function Projects() {
         <ComplaintPopup
           detailData={detailData}
           handleClose={handleClose}
-          assignees={assignees}
           handleAssign={handleAssign}
           handleReject={handleReject}
         />
