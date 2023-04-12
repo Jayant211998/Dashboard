@@ -16,7 +16,7 @@ function DataTableBodyCell({ noBorder, align, children }) {
         borderBottom: noBorder ? "none" : `${borderWidth[1]} solid ${light.main}`,
       })}
     >
-      <MDBox display="inline-block" color="text" sx={{ verticalAlign: "middle" }} multi>
+      <MDBox display="inline-block" color="black" sx={{ verticalAlign: "middle" }} multi>
         {children}
       </MDBox>
     </MDBox>

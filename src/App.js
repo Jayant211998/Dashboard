@@ -22,6 +22,7 @@ import themeDark from "assets/theme-dark";
 
 // Material Dashboard 2 React routes
 import routes from "routes";
+import Cookies from "js-cookie";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -134,7 +135,12 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+        <Route
+          path="*"
+          element={
+            <Navigate to={Cookies.get("token") ? "/dashboard" : "/authentication/sign-in"} />
+          }
+        />
       </Routes>
     </ThemeProvider>
   );

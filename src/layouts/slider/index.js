@@ -39,7 +39,7 @@ function Slider() {
         setError(true);
         setErrText(traceAndThrow(err));
       });
-  }, [isSubmitted, imgList]);
+  }, [isSubmitted]);
 
   const handleSubmit = () => {
     const url = "https://api.rausmartcity.com/add-user-slider/secure";

@@ -196,7 +196,7 @@ function DataTable({
                     ((new Date().getTime() - new Date(row.values.date).getTime()) /
                       (1000 * 3600 * 24) >=
                     2
-                      ? "red"
+                      ? "#FF7F50"
                       : "yellow"),
                 }}
                 {...row.getRowProps()}
