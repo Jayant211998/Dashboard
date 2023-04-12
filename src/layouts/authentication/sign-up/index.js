@@ -21,7 +21,7 @@ import traceAndThrow from "utils/Errors";
 import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 
 // Images
-import bgImage from "assets/images/rajwada.jpg";
+import bgImage from "assets/images/rajwada.jpeg";
 
 function Cover() {
   const [popup, setPopup] = useState(false);

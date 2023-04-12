@@ -21,7 +21,7 @@ import traceAndThrow from "utils/Errors";
 import SigninPopup from "examples/Popup/SigninPopup";
 
 // Images
-import bgImage from "assets/images/rajwada.jpg";
+import bgImage from "assets/images/rajwada.jpeg";
 
 function Basic() {
   const [error, setError] = useState(false);
