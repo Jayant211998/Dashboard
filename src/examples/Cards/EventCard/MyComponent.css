@@ -1,0 +1,39 @@
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Display 3 cards in each row */
+    gap: 10px; /* Add gap between cards */
+  }
+  .card p{
+    color:black;
+    font-weight: bold;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    margin-top: 0.5rem;
+    width: 18rem; /* Set fixed width for each card */
+    height: 23rem; /* Set fixed height for each card */
+    padding: 1rem;
+    background-color: #f8f8f8;
+    border: 0.1rem solid #ddd;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+  }
+  
+  .card:hover{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    margin-top: 0.5rem;
+    width: 20rem; /* Set fixed width for each card */
+    height: 25rem; /* Set fixed height for each card */
+    padding: 1rem;
+    background-color: #ff8e8e;
+    border: 0.1rem solid #ddd;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }

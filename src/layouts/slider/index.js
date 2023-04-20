@@ -19,7 +19,6 @@ function Slider() {
   const [errText, setErrText] = useState(false);
   const [imgList, setImgList] = React.useState([]);
   const [image, setImage] = React.useState(null);
-  // const [newCard, setNewCard] = React.useState("inactive");
   const [isSubmitted, setIsSubmitted] = React.useState(false);
 
   React.useEffect(() => {

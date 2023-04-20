@@ -1,287 +1,51 @@
-import React, { useState } from "react";
-import { Button, Grid, TextField } from "@mui/material";
-import axios from "axios";
-import Cookies from "js-cookie";
+import React, { useState, useEffect } from "react";
 
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+// @mui material components
+import Grid from "@mui/material/Grid";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+
+import breakpoints from "assets/theme/base/breakpoints";
+
+// Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
-import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
-import traceAndThrow from "../../utils/Errors";
+import CreateEvents from "./CreateEvent";
+import ShowEvents from "./ShowEvents";
 
-import EventsPopup from "../../examples/Popup/EventsPopup";
+export default function Events() {
+  const [tabValue, setTabValue] = useState(0);
+  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
 
-function Events() {
-  const [error, setError] = useState(false);
-  const [eventImage, setEventImage] = useState("");
-  const [eventImg, setEventImg] = useState(null);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [eventName, setEventName] = useState("");
-  const [description, setDescription] = useState("");
-  const [venue, setVenue] = useState("");
-  const [guest, setGuest] = useState("");
-  const [popup, setPopup] = useState(false);
-  const [text, setText] = useState(false);
-  const [disable, setDisable] = useState(false);
-  const [textFields, setTextFields] = useState([]);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setEventImg(file);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setEventImage(reader.result);
-    };
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (startDate === "") {
-      setError(true);
-      setText("Please Enter Start date.");
-    } else if (endDate === "") {
-      setError(true);
-      setText("Please Enter End date.");
-    } else if (startTime === "") {
-      setError(true);
-      setText("Please Enter Start Time.");
-    } else if (endTime === "") {
-      setError(true);
-      setText("Please Enter End Time.");
-    } else if (new Date(startDate) < new Date() || new Date(endDate) < new Date()) {
-      setError(true);
-      setText("Please Enter Future Date.");
-    } else if (new Date(startDate) > new Date(endDate)) {
-      setError(true);
-      setText("End Date should be Greater than Start Date.");
-    } else if (description === "") {
-      setError(true);
-      setText("Please Enter Event Description.");
-    } else if (venue === "") {
-      setError(true);
-      setText("Please Enter Event Venue.");
-    } else if (guest === "") {
-      setError(true);
-      setText("Please Enter Number of People attending Event.");
-    } else {
-      // console.log("passed", startDate, endDate, new Date());
-      setDisable(true);
-      const apiUrl = "https://api.rausmartcity.com/add-new-event/secure";
-      const headers = {
-        Authorization: `Bearer ${Cookies.get("token")}`,
-        "Content-Type": "multipart/form-data",
-      };
-      const formData = new FormData();
-      formData.append("eventImage1", eventImg);
-      formData.append("eventName", eventName);
-      formData.append("startDate", startDate);
-      formData.append("endDate", endDate);
-      formData.append("startTime", startTime);
-      formData.append("endTime", endTime);
-      formData.append("description", description);
-      formData.append("venue", venue);
-      formData.append("peopleAttending", guest);
-      formData.append("guest", JSON.stringify(textFields));
-      axios
-        .post(apiUrl, formData, { headers })
-        .then(() => {
-          setPopup(true);
-          setDisable(false);
-        })
-        .catch((err) => {
-          // console.error(err);
-          setDisable(false);
-          setError(true);
-          setText(traceAndThrow(err));
-        });
+  useEffect(() => {
+    function handleTabsOrientation() {
+      return window.innerWidth < breakpoints.values.sm
+        ? setTabsOrientation("vertical")
+        : setTabsOrientation("horizontal");
     }
-  };
+    window.addEventListener("resize", handleTabsOrientation);
+    handleTabsOrientation();
+    return () => window.removeEventListener("resize", handleTabsOrientation);
+  }, [tabsOrientation]);
 
-  const handleClose = () => {
-    setPopup(false);
-  };
-
-  const handleAddTextField = () => {
-    const newTextField = { id: textFields.length, guestName: "", designation: "" };
-    setTextFields([...textFields, newTextField]);
-  };
-
-  const handleTextFieldChange = (event, id, property) => {
-    const updatedTextFields = textFields.map((textField) => {
-      if (textField.id === id && property === "name") {
-        return { ...textField, guestName: event.target.value };
-      }
-      if (textField.id === id && property === "designation") {
-        return { ...textField, designation: event.target.value };
-      }
-      return textField;
-    });
-    setTextFields(updatedTextFields);
-  };
+  const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
   return (
-    <>
-      <DashboardLayout>
-        <DashboardNavbar />
-        {eventImage && (
-          <div
-            className="card"
-            style={{
-              backgroundImage: `url(${eventImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              width: "50rem",
-              height: "20rem",
-              margin: "2rem auto",
-              border: "1px solid black",
-              position: "relative",
-              borderRadius: "1rem",
-            }}
-          />
-        )}
-        <Grid container spacing={2}>
-          <br />
-          <br />
-          <Grid item xs={12}>
-            <input label="Upload event image" type="file" onChange={handleImageChange} />
-          </Grid>
-          <br />
-          <Grid item xs={12}>
-            <TextField
-              label="Event start date"
-              type="date"
-              value={startDate}
-              style={{ width: "48%" }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <TextField
-              label="Event end date"
-              type="date"
-              style={{ width: "48%", marginLeft: "4%" }}
-              value={endDate}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Event start time"
-              type="time"
-              value={startTime}
-              style={{ width: "48%" }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={(e) => setStartTime(e.target.value)}
-            />
-            <TextField
-              label="Event end time"
-              type="time"
-              style={{ width: "48%", marginLeft: "4%" }}
-              value={endTime}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={(e) => setEndTime(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Name of event"
-              value={eventName}
-              onChange={(e) => setEventName(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              multiline
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Venue of event"
-              value={venue}
-              onChange={(e) => setVenue(e.target.value)}
-              multiline
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              type="number"
-              label="Number Of Guests"
-              value={guest}
-              onChange={(e) => setGuest(e.target.value)}
-            />
-          </Grid>
-          {textFields.map((textField) => (
-            <Grid item xs={12} key={textField.id}>
-              <TextField
-                label="Cheif Guest"
-                type="text"
-                style={{ width: "48%" }}
-                value={textField.guestName || ""}
-                onChange={(event) => handleTextFieldChange(event, textField.id, "name")}
-              />
-              <TextField
-                label="Designation"
-                type="text"
-                style={{ width: "48%", marginLeft: "4%" }}
-                value={textField.designation || ""}
-                onChange={(event) => handleTextFieldChange(event, textField.id, "designation")}
-              />
-            </Grid>
-          ))}
-          <Grid item xs={12}>
-            <Button
-              type="button"
-              variant="contained"
-              onClick={handleAddTextField}
-              style={{ color: "white", width: "10rem" }}
-            >
-              Add text field
-            </Button>
-          </Grid>
-          <br />
-          <br />
-          <br />
-          <Button
-            disabled={disable}
-            type="button"
-            variant="contained"
-            onClick={handleSubmit}
-            style={{ color: "white", marginLeft: "1rem", width: "8rem" }}
-          >
-            Submit
-          </Button>
+    <DashboardLayout>
+      <DashboardNavbar />
+      <Grid container spacing={3} alignItems="center">
+        <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+          <AppBar position="static">
+            <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
+              <Tab label="Create" />
+              <Tab label="Show All" />
+            </Tabs>
+          </AppBar>
         </Grid>
-      </DashboardLayout>
-      {popup && <EventsPopup detailData={eventName} handleClose={handleClose} />}
-      {error && (
-        <ErrorSnackbar
-          text={text}
-          handleClose={() => {
-            setError(false);
-          }}
-        />
-      )}
-    </>
+      </Grid>
+      {tabValue ? <ShowEvents /> : <CreateEvents />}
+    </DashboardLayout>
   );
 }
-
-export default Events;

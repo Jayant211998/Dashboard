@@ -192,6 +192,7 @@ function DataTable({
               <TableRow
                 style={{
                   backgroundColor:
+                    row.original.complaint &&
                     row.original.status &&
                     ((new Date().getTime() - new Date(row.values.date).getTime()) /
                       (1000 * 3600 * 24) >=

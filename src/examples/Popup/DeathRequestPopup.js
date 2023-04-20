@@ -71,14 +71,14 @@ function DeathRequestPopup({ handleClose, requestData, handleSchedule, handleRes
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="subtitle1">
-              Request Id: {requestData.reuestData.requestId}
+              Request Id: {requestData.requestData.requestId}
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
               label="Date of Death"
-              defaultValue={requestData.reuestData.deathCertificate.dateOfDeath}
+              defaultValue={requestData.requestData.deathCertificate.dateOfDeath}
               disabled
             />
           </Grid>
@@ -86,7 +86,7 @@ function DeathRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Gender"
-              defaultValue={requestData.reuestData.deathCertificate.gender}
+              defaultValue={requestData.requestData.deathCertificate.gender}
               disabled
             />
           </Grid>
@@ -94,7 +94,7 @@ function DeathRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Person Name"
-              defaultValue={requestData.reuestData.deathCertificate.nameOfDeceased}
+              defaultValue={requestData.requestData.deathCertificate.nameOfDeceased}
               disabled
             />
           </Grid>
@@ -102,7 +102,7 @@ function DeathRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Fathers Name"
-              defaultValue={requestData.reuestData.deathCertificate.fathersName}
+              defaultValue={requestData.requestData.deathCertificate.fathersName}
               disabled
             />
           </Grid>
@@ -110,7 +110,7 @@ function DeathRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Place Of Cremation"
-              defaultValue={requestData.reuestData.deathCertificate.placeOfCremation}
+              defaultValue={requestData.requestData.deathCertificate.placeOfCremation}
               disabled
             />
           </Grid>
@@ -118,7 +118,7 @@ function DeathRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Place of Death"
-              defaultValue={requestData.reuestData.deathCertificate.placeOfDeath}
+              defaultValue={requestData.requestData.deathCertificate.placeOfDeath}
               multiline
               disabled
             />
@@ -127,7 +127,7 @@ function DeathRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Address"
-              defaultValue={requestData.reuestData.deathCertificate.homeAddress}
+              defaultValue={requestData.requestData.deathCertificate.homeAddress}
               multiline
               disabled
             />
@@ -135,13 +135,13 @@ function DeathRequestPopup({ handleClose, requestData, handleSchedule, handleRes
           <Grid item xs={12}>
             <TextField
               fullWidth
-              disabled={requestData.reuestData.requestStatus !== "Pending"}
+              disabled={requestData.requestData.requestStatus !== "Pending"}
               id="datetime-local"
               label="Appointment Date"
               type="datetime-local"
               value={
-                requestData.reuestData.requestStatus !== "Pending"
-                  ? requestData.reuestData.documentVerificationDate
+                requestData.requestData.requestStatus !== "Pending"
+                  ? requestData.requestData.documentVerificationDate
                   : selectedDate
               }
               className={classes.textField}
@@ -155,22 +155,22 @@ function DeathRequestPopup({ handleClose, requestData, handleSchedule, handleRes
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        {requestData.reuestData.requestStatus === "Pending" && (
+        {requestData.requestData.requestStatus === "Pending" && (
           <Button
             variant="contained"
             color="primary"
             style={{ color: "white" }}
-            onClick={() => handleSchedule(requestData.reuestData.requestId, selectedDate)}
+            onClick={() => handleSchedule(requestData.requestData.requestId, selectedDate)}
           >
             Schedule
           </Button>
         )}
-        {requestData.reuestData.requestStatus === "Scheduled" && (
+        {requestData.requestData.requestStatus === "Scheduled" && (
           <Button
             variant="contained"
             color="primary"
             style={{ color: "white" }}
-            onClick={() => handleResolved(requestData.reuestData.requestId)}
+            onClick={() => handleResolved(requestData.requestData.requestId)}
           >
             Resolved
           </Button>
@@ -185,7 +185,7 @@ DeathRequestPopup.propTypes = {
   handleSchedule: PropTypes.func.isRequired,
   handleResolved: PropTypes.func.isRequired,
   requestData: PropTypes.shape({
-    reuestData: PropTypes.shape({
+    requestData: PropTypes.shape({
       requestId: PropTypes.string.isRequired,
       requestStatus: PropTypes.string.isRequired,
       documentVerificationDate: PropTypes.string.isRequired,

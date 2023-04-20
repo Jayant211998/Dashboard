@@ -55,7 +55,7 @@ function Dashboard() {
         .then((response) => {
           const data = response.data.body;
           setRequest(data.length);
-          const data1 = data.filter((req) => req.reuestData.requestStatus === "Pending");
+          const data1 = data.filter((req) => req.requestData.requestStatus === "Pending");
           setNewRequest(data1.length);
         })
         .catch((err) => {

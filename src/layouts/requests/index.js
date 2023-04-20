@@ -138,16 +138,16 @@ function Requests() {
     if (response.status === 200 || response.status === 201) {
       const tableData = response.data.body.filter(
         (req) =>
-          req.reuestData.requestType === "birthCertificate" &&
-          ((value === 0 && req.reuestData.requestStatus === "Pending") ||
-            (value === 1 && req.reuestData.requestStatus === "Scheduled") ||
-            (value === 2 && req.reuestData.requestStatus === "Resolved"))
+          req.requestData.requestType === "birthCertificate" &&
+          ((value === 0 && req.requestData.requestStatus === "Pending") ||
+            (value === 1 && req.requestData.requestStatus === "Scheduled") ||
+            (value === 2 && req.requestData.requestStatus === "Resolved"))
       );
       const TableContent = tableData.map((compData) => ({
-        requestId: compData.reuestData.requestId,
-        requester: compData.reuestData.userName,
-        status: compData.reuestData.requestStatus,
-        date: compData.reuestData.createdAt.split("T")[0],
+        requestId: compData.requestData.requestId,
+        requester: compData.requestData.userName,
+        status: compData.requestData.requestStatus,
+        date: compData.requestData.createdAt.split("T")[0],
         details: (
           <button
             type="button"
@@ -168,16 +168,16 @@ function Requests() {
     if (response.status === 200 || response.status === 201) {
       const tableData = response.data.body.filter(
         (req) =>
-          req.reuestData.requestType === "deathCertificate" &&
-          ((value === 0 && req.reuestData.requestStatus === "Pending") ||
-            (value === 1 && req.reuestData.requestStatus === "Scheduled") ||
-            (value === 2 && req.reuestData.requestStatus === "Resolved"))
+          req.requestData.requestType === "deathCertificate" &&
+          ((value === 0 && req.requestData.requestStatus === "Pending") ||
+            (value === 1 && req.requestData.requestStatus === "Scheduled") ||
+            (value === 2 && req.requestData.requestStatus === "Resolved"))
       );
       const TableContent = tableData.map((compData) => ({
-        requestId: compData.reuestData.requestId,
-        requester: compData.reuestData.userName,
-        status: compData.reuestData.requestStatus,
-        date: compData.reuestData.createdAt.split("T")[0],
+        requestId: compData.requestData.requestId,
+        requester: compData.requestData.userName,
+        status: compData.requestData.requestStatus,
+        date: compData.requestData.createdAt.split("T")[0],
         details: (
           <button
             type="button"
@@ -198,7 +198,7 @@ function Requests() {
   useEffect(() => {
     function getapi() {
       axios
-        .get("https://api.rausmartcity.com/get-all-user-requests/secure?page=3", {
+        .get("https://api.rausmartcity.com/get-all-user-requests/secure", {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
             "Content-Type": "application/json",

@@ -39,7 +39,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
   const handleChange = (e) => {
     handleDateChange(e.target.value);
   };
-
+  console.log(requestData);
   return (
     <Dialog open={requestData !== null} onClose={handleClose}>
       <DialogTitle>Birth Certificate Request</DialogTitle>
@@ -70,14 +70,14 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="subtitle1">
-              Request Id: {requestData.reuestData.requestId}
+              Request Id: {requestData.requestData.requestId}
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
               label="Date of Birth"
-              defaultValue={requestData.reuestData.birthCertificate.dateOfBirth}
+              defaultValue={requestData.requestData.birthCertificate.dateOfBirth}
               disabled
             />
           </Grid>
@@ -85,7 +85,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Gender"
-              defaultValue={requestData.reuestData.birthCertificate.childGender}
+              defaultValue={requestData.requestData.birthCertificate.childGender}
               disabled
             />
           </Grid>
@@ -93,7 +93,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Child Name"
-              defaultValue={requestData.reuestData.birthCertificate.childNameEnglish}
+              defaultValue={requestData.requestData.birthCertificate.childNameEnglish}
               disabled
             />
           </Grid>
@@ -101,7 +101,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Fathers Name"
-              defaultValue={requestData.reuestData.birthCertificate.fathersName}
+              defaultValue={requestData.requestData.birthCertificate.fathersName}
               disabled
             />
           </Grid>
@@ -109,7 +109,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Mothers Name"
-              defaultValue={requestData.reuestData.birthCertificate.mothersName}
+              defaultValue={requestData.requestData.birthCertificate.mothersName}
               disabled
             />
           </Grid>
@@ -117,7 +117,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Place of Birth"
-              defaultValue={requestData.reuestData.birthCertificate.placeOfBirth}
+              defaultValue={requestData.requestData.birthCertificate.placeOfBirth}
               multiline
               disabled
             />
@@ -126,7 +126,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
             <TextField
               fullWidth
               label="Address"
-              defaultValue={requestData.reuestData.birthCertificate.address}
+              defaultValue={requestData.requestData.birthCertificate.address}
               multiline
               disabled
             />
@@ -134,13 +134,13 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
           <Grid item xs={12}>
             <TextField
               fullWidth
-              disabled={requestData.reuestData.requestStatus !== "Pending"}
+              disabled={requestData.requestData.requestStatus !== "Pending"}
               id="datetime-local"
               label="Appointment Date"
               type="datetime-local"
               value={
-                requestData.reuestData.requestStatus !== "Pending"
-                  ? requestData.reuestData.documentVerificationDate
+                requestData.requestData.requestStatus !== "Pending"
+                  ? requestData.requestData.documentVerificationDate
                   : selectedDate
               }
               className={classes.textField}
@@ -154,22 +154,22 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        {requestData.reuestData.requestStatus === "Pending" && (
+        {requestData.requestData.requestStatus === "Pending" && (
           <Button
             variant="contained"
             color="primary"
             style={{ color: "white" }}
-            onClick={() => handleSchedule(requestData.reuestData.requestId, selectedDate)}
+            onClick={() => handleSchedule(requestData.requestData.requestId, selectedDate)}
           >
             Schedule
           </Button>
         )}
-        {requestData.reuestData.requestStatus === "Scheduled" && (
+        {requestData.requestData.requestStatus === "Scheduled" && (
           <Button
             variant="contained"
             color="primary"
             style={{ color: "white" }}
-            onClick={() => handleResolved(requestData.reuestData.requestId)}
+            onClick={() => handleResolved(requestData.requestData.requestId)}
           >
             Resolved
           </Button>
@@ -181,7 +181,7 @@ function BirthRequestPopup({ handleClose, requestData, handleSchedule, handleRes
 
 BirthRequestPopup.propTypes = {
   requestData: PropTypes.shape({
-    reuestData: PropTypes.shape({
+    requestData: PropTypes.shape({
       requestStatus: PropTypes.string.isRequired,
       requestId: PropTypes.string.isRequired,
       documentVerificationDate: PropTypes.string.isRequired,
