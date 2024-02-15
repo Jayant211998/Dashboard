@@ -131,7 +131,7 @@ function DataTable({
   }
 
   return (
-    <TableContainer sx={{ boxShadow: "none" }} style={{ height: "15rem", overflow: "scroll" }}>
+    <TableContainer sx={{ boxShadow: "none" }} style={{ height: "17.5rem", overflow: "scroll" }}>
       {entriesPerPage || canSearch ? (
         <MDBox display="flex" justifyContent="space-between" alignItems="center" p={5}>
           {entriesPerPage && (
@@ -189,7 +189,19 @@ function DataTable({
           {page.map((row, key) => {
             prepareRow(row);
             return (
-              <TableRow {...row.getRowProps()}>
+              <TableRow
+                style={{
+                  backgroundColor:
+                    row.original.complaint &&
+                    row.original.status &&
+                    ((new Date().getTime() - new Date(row.values.date).getTime()) /
+                      (1000 * 3600 * 24) >=
+                    2
+                      ? "#FF7F50"
+                      : "yellow"),
+                }}
+                {...row.getRowProps()}
+              >
                 {row.cells.map((cell) => (
                   <DataTableBodyCell
                     noBorder={noEndBorder && rows.length - 1 === key}

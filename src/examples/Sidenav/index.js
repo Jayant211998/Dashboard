@@ -1,19 +1,6 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useEffect } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 // react-router-dom components
 import { useLocation, NavLink } from "react-router-dom";
@@ -30,7 +17,7 @@ import Icon from "@mui/material/Icon";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-// import MDButton from "components/MDButton";
+import { Button } from "@material-ui/core";
 
 // Material Dashboard 2 React example components
 import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
@@ -88,6 +75,28 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
     let returnValue;
 
+    const handleLogout = () => {
+      const endpoint = "https://api.rausmartcity.com/logout-admin/JDWedjsew94513ndjsd-ssg/secure";
+
+      const headers = {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      };
+
+      axios
+        .post(endpoint, {}, { headers })
+        .then((response) => {
+          // handle successful response
+          console.log(response.data);
+          Cookies.remove("token");
+          Cookies.remove("sessionId");
+          window.location.replace("/authentication/sign-in");
+        })
+        .catch((err) => {
+          // handle error
+          console.error(err);
+        });
+    };
+
     if (type === "collapse") {
       returnValue = href ? (
         <Link
@@ -137,6 +146,19 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         />
       );
     }
+    if (type === "logout") {
+      returnValue = (
+        <Button
+          style={{ color: "white", marginLeft: "4.8rem", marginTop: "10rem" }}
+          onClick={handleLogout}
+        >
+          <Icon fontSize="small" style={{ marginRight: "0.2rem" }}>
+            logout
+          </Icon>
+          Logout
+        </Button>
+      );
+    }
 
     return returnValue;
   });
@@ -162,7 +184,15 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           </MDTypography>
         </MDBox>
         <MDBox component={NavLink} to="/" display="flex" alignItems="center">
-          {brand && <MDBox component="img" src={brand} alt="Brand" width="2rem" />}
+          {brand && (
+            <MDBox
+              component="img"
+              src={brand}
+              alt="Brand"
+              width="2rem"
+              style={{ marginRight: "0.5rem", borderRadius: "1rem" }}
+            />
+          )}
           <MDBox
             width={!brandName && "100%"}
             sx={(theme) => sidenavLogoLabel(theme, { miniSidenav })}

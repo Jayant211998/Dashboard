@@ -1,167 +1,51 @@
-import React, { useState } from "react";
-import { Button, Grid, TextField } from "@mui/material";
+import React, { useState, useEffect } from "react";
 
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+// @mui material components
+import Grid from "@mui/material/Grid";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+
+import breakpoints from "assets/theme/base/breakpoints";
+
+// Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
-import EventsPopup from "../../examples/Popup/EventsPopup";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
-function Events() {
-  const [eventImage, setEventImage] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [eventName, setEventName] = useState("");
-  const [description, setDescription] = useState("");
-  const [venue, setVenue] = useState("");
-  const [popup, setPopup] = useState(false);
-  const [error, setError] = useState(false);
-  const [text, setText] = useState(false);
+import CreateEvents from "./CreateEvent";
+import ShowEvents from "./ShowEvents";
 
-  const handleImageChange = (e) => {
-    setEventImage(e.target.files[0]);
-  };
+export default function Events() {
+  const [tabValue, setTabValue] = useState(0);
+  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (startDate === "") {
-      setError(true);
-      setText("Please Enter Start date.");
-    } else if (endDate === "") {
-      setError(true);
-      setText("Please Enter End date.");
-    } else if (startTime === "") {
-      setError(true);
-      setText("Please Enter Start Time.");
-    } else if (endTime === "") {
-      setError(true);
-      setText("Please Enter End Time.");
-    } else if (eventName === "") {
-      setError(true);
-      setText("Please Enter Event Name.");
-    } else if (description === "") {
-      setError(true);
-      setText("Please Enter Event Description.");
-    } else if (venue === "") {
-      setError(true);
-      setText("Please Enter Event Venue.");
-    } else {
-      setPopup(true);
-      // Backend create new event entry
+  useEffect(() => {
+    function handleTabsOrientation() {
+      return window.innerWidth < breakpoints.values.sm
+        ? setTabsOrientation("vertical")
+        : setTabsOrientation("horizontal");
     }
-  };
+    window.addEventListener("resize", handleTabsOrientation);
+    handleTabsOrientation();
+    return () => window.removeEventListener("resize", handleTabsOrientation);
+  }, [tabsOrientation]);
 
-  const handleClose = () => {
-    setPopup(false);
-  };
+  const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
   return (
-    <>
-      <DashboardLayout>
-        <DashboardNavbar />
-        {eventImage && <img src={eventImage} alt="Event" />}
-        <Grid container spacing={2}>
-          <br />
-          <br />
-          <Grid item xs={12}>
-            <input label="Upload event image" type="file" onChange={handleImageChange} />
-          </Grid>
-          <br />
-          <Grid item xs={12}>
-            <TextField
-              label="Event start date"
-              type="date"
-              value={startDate}
-              style={{ width: "48%" }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <TextField
-              label="Event end date"
-              type="date"
-              style={{ width: "48%", marginLeft: "4%" }}
-              value={endDate}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Event start time"
-              type="time"
-              value={startTime}
-              style={{ width: "48%" }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={(e) => setStartTime(e.target.value)}
-            />
-            <TextField
-              label="Event end time"
-              type="time"
-              style={{ width: "48%", marginLeft: "4%" }}
-              value={endTime}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={(e) => setEndTime(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Name of event"
-              value={eventName}
-              onChange={(e) => setEventName(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              multiline
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Venue of event"
-              value={venue}
-              onChange={(e) => setVenue(e.target.value)}
-              multiline
-            />
-          </Grid>
-          <br />
-          <br />
-          <br />
-          <Button
-            type="button"
-            variant="contained"
-            onClick={handleSubmit}
-            style={{ color: "white", marginLeft: "0.8rem", width: "8rem" }}
-          >
-            Submit
-          </Button>
+    <DashboardLayout>
+      <DashboardNavbar />
+      <Grid container spacing={3} alignItems="center">
+        <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+          <AppBar position="static">
+            <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
+              <Tab label="Create" />
+              <Tab label="Show All" />
+            </Tabs>
+          </AppBar>
         </Grid>
-      </DashboardLayout>
-      {popup && <EventsPopup detailData={eventName} handleClose={handleClose} />}
-      {error && (
-        <ErrorSnackbar
-          text={text}
-          handleClose={() => {
-            setError(false);
-          }}
-        />
-      )}
-    </>
+      </Grid>
+      {tabValue ? <ShowEvents /> : <CreateEvents />}
+    </DashboardLayout>
   );
 }
-
-export default Events;

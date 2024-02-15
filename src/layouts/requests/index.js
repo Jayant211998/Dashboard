@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -14,9 +19,9 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import birthcertificate from "layouts/requests/data/birthcertificate";
-import deathCertificate from "layouts/requests/data/deathcertificate";
+import breakpoints from "assets/theme/base/breakpoints";
 
+import traceAndThrow from "utils/Errors";
 import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 import SuccessSnackbar from "examples/Snackbar/SuccessSnackbar";
 import DeathRequestPopup from "../../examples/Popup/DeathRequestPopup";
@@ -30,6 +35,20 @@ function Requests() {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [text, setText] = useState("");
+  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
+  const [tabValue, setTabValue] = useState(0);
+  const [responseData, setResponseData] = useState([]);
+
+  useEffect(() => {
+    function handleTabsOrientation() {
+      return window.innerWidth < breakpoints.values.sm
+        ? setTabsOrientation("vertical")
+        : setTabsOrientation("horizontal");
+    }
+    window.addEventListener("resize", handleTabsOrientation);
+    handleTabsOrientation();
+    return () => window.removeEventListener("resize", handleTabsOrientation);
+  }, [tabsOrientation]);
 
   const handleBirthClick = (e, Data) => {
     e.preventDefault();
@@ -47,40 +66,207 @@ function Requests() {
   const handleCloseDeath = () => {
     setShowDeathDetails(false);
   };
-  const handleBirthSchedule = (id, date) => {
+  const handleResolved = (id) => {
+    axios
+      .patch(
+        `https://api.rausmartcity.com/update-user-requests/secure/${id}`,
+        {
+          requestStatus: "Resolved",
+        },
+        {
+          // Request headers
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        setSuccess(true);
+        setText("Request Resolved.");
+        setShowBirthDetails(false);
+        setShowDeathDetails(false);
+      })
+      .catch((err) => {
+        setError(true);
+        setText(traceAndThrow(err));
+      });
+  };
+  const handleSchedule = (id, date) => {
     if (date === "") {
       setError(true);
       setText("Please set date to Schedule Appointment.");
     } else {
-      setSuccess(true);
-      setText("Appointment set Successfully.");
-      setShowBirthDetails(false);
-      console.log(id, date);
-      handleCloseBirth();
       // Backend update id and set date
+      axios
+        .patch(
+          `https://api.rausmartcity.com/update-user-requests/secure/${id}`,
+          {
+            documentVerificationDate: date.toString(),
+            requestStatus: "Scheduled",
+          },
+          {
+            // Request headers
+            headers: {
+              Authorization: `Bearer ${Cookies.get("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setSuccess(true);
+          setText("Appointment set Successfully.");
+          setShowBirthDetails(false);
+          setShowDeathDetails(false);
+        })
+        .catch((err) => {
+          setError(true);
+          setText(traceAndThrow(err));
+        });
     }
   };
-  const handleDeathSchedule = (id, date) => {
-    if (date === "") {
-      setError(true);
-      setText("Please set date to Schedule Appointment.");
-    } else {
-      setSuccess(true);
-      setText("Appointment set Successfully.");
-      setShowDeathDetails(false);
-      console.log(id, date);
-      handleCloseDeath();
-      // Backend update id and set date
+  const handleSetTabValue = (event, newValue) => setTabValue(newValue);
+
+  const [bRow, setBRows] = useState([]);
+  const [dRow, setDRows] = useState([]);
+  const [bColumn, setBColumn] = useState([]);
+  const [dColumn, setDColumn] = useState([]);
+
+  function birthcertificate(handleClick, value, response) {
+    if (response.status === 200 || response.status === 201) {
+      const tableData = response.data.body.filter(
+        (req) =>
+          req.requestData.requestType === "birthCertificate" &&
+          ((value === 0 && req.requestData.requestStatus === "Pending") ||
+            (value === 1 && req.requestData.requestStatus === "Scheduled") ||
+            (value === 2 && req.requestData.requestStatus === "Resolved"))
+      );
+      const TableContent = tableData.map((compData) => ({
+        requestId: compData.requestData.requestId,
+        requester: compData.requestData.userName,
+        status: compData.requestData.requestStatus,
+        date: compData.requestData.createdAt.split("T")[0],
+        details: (
+          <button
+            type="button"
+            style={{ border: "none", background: "transparent" }}
+            onClick={(e) => {
+              handleClick(e, compData);
+            }}
+          >
+            Details
+          </button>
+        ),
+      }));
+      return TableContent;
     }
-  };
+    return [];
+  }
+  function deathCertificate(handleClick, value, response) {
+    if (response.status === 200 || response.status === 201) {
+      const tableData = response.data.body.filter(
+        (req) =>
+          req.requestData.requestType === "deathCertificate" &&
+          ((value === 0 && req.requestData.requestStatus === "Pending") ||
+            (value === 1 && req.requestData.requestStatus === "Scheduled") ||
+            (value === 2 && req.requestData.requestStatus === "Resolved"))
+      );
+      const TableContent = tableData.map((compData) => ({
+        requestId: compData.requestData.requestId,
+        requester: compData.requestData.userName,
+        status: compData.requestData.requestStatus,
+        date: compData.requestData.createdAt.split("T")[0],
+        details: (
+          <button
+            type="button"
+            style={{ border: "none", background: "transparent" }}
+            onClick={(e) => {
+              handleClick(e, compData);
+            }}
+          >
+            Details
+          </button>
+        ),
+      }));
+      return TableContent;
+    }
+    return [];
+  }
 
-  const { columns, rows } = birthcertificate(handleBirthClick);
-  const { columns: pColumns, rows: pRows } = deathCertificate(handleDeathClick);
-
+  useEffect(() => {
+    function getapi() {
+      axios
+        .get("https://api.rausmartcity.com/get-all-user-requests/secure", {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          setResponseData(response);
+          const bData = birthcertificate(handleBirthClick, tabValue, response);
+          const dData = deathCertificate(handleDeathClick, tabValue, response);
+          setBRows(bData);
+          setDRows(dData);
+          setBColumn([
+            { Header: "Request Id", accessor: "requestId", width: "20%", align: "left" },
+            { Header: "Requester Name", accessor: "requester", width: "20%", align: "left" },
+            { Header: "Date of Request", accessor: "date", align: "center" },
+            { Header: "Status", accessor: "status", align: "center" },
+            { Header: "See Details", accessor: "details", align: "center" },
+          ]);
+          setDColumn([
+            { Header: "Request Id", accessor: "requestId", width: "20%", align: "left" },
+            { Header: "Requester Name", accessor: "requester", width: "20%", align: "left" },
+            { Header: "Date of Request", accessor: "date", align: "center" },
+            { Header: "Status", accessor: "status", align: "center" },
+            { Header: "See Details", accessor: "details", align: "center" },
+          ]);
+        })
+        .catch((err) => {
+          setError(true);
+          setText(traceAndThrow(err));
+        });
+    }
+    getapi();
+  }, []);
+  useLayoutEffect(() => {
+    const bData = birthcertificate(handleBirthClick, tabValue, responseData);
+    const dData = deathCertificate(handleDeathClick, tabValue, responseData);
+    setBRows(bData);
+    setDRows(dData);
+    setBColumn([
+      { Header: "Request Id", accessor: "requestId", width: "20%", align: "left" },
+      { Header: "Requester Name", accessor: "requester", width: "20%", align: "left" },
+      { Header: "Date of Request", accessor: "date", align: "center" },
+      { Header: "Status", accessor: "status", align: "center" },
+      { Header: "See Details", accessor: "details", align: "center" },
+    ]);
+    setDColumn([
+      { Header: "Request Id", accessor: "requestId", width: "20%", align: "left" },
+      { Header: "Requester Name", accessor: "requester", width: "20%", align: "left" },
+      { Header: "Date of Request", accessor: "date", align: "center" },
+      { Header: "Status", accessor: "status", align: "center" },
+      { Header: "See Details", accessor: "details", align: "center" },
+    ]);
+  }, [tabValue]);
   return (
     <>
       <DashboardLayout>
         <DashboardNavbar />
+        <Grid container spacing={3} alignItems="center">
+          <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+            <AppBar position="static">
+              <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
+                <Tab label="Pending" />
+                <Tab label="Scheduled" />
+                <Tab label="Resolved" />
+              </Tabs>
+            </AppBar>
+          </Grid>
+        </Grid>
         <MDBox pt={6} pb={3}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
@@ -101,7 +287,7 @@ function Requests() {
                 </MDBox>
                 <MDBox pt={3}>
                   <DataTable
-                    table={{ columns, rows }}
+                    table={{ columns: bColumn, rows: bRow }}
                     isSorted={false}
                     entriesPerPage={false}
                     showTotalEntries={false}
@@ -128,7 +314,7 @@ function Requests() {
                 </MDBox>
                 <MDBox pt={3}>
                   <DataTable
-                    table={{ columns: pColumns, rows: pRows }}
+                    table={{ columns: dColumn, rows: dRow }}
                     isSorted={false}
                     entriesPerPage={false}
                     showTotalEntries={false}
@@ -144,14 +330,16 @@ function Requests() {
         <BirthRequestPopup
           requestData={birthDetailData}
           handleClose={handleCloseBirth}
-          handleSchedule={handleBirthSchedule}
+          handleSchedule={handleSchedule}
+          handleResolved={handleResolved}
         />
       )}
       {showDeathDetails && (
         <DeathRequestPopup
           requestData={deathDetailData}
           handleClose={handleCloseDeath}
-          handleSchedule={handleDeathSchedule}
+          handleSchedule={handleSchedule}
+          handleResolved={handleResolved}
         />
       )}
       {error && (

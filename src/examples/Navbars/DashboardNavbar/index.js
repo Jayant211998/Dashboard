@@ -20,7 +20,8 @@ import Breadcrumbs from "examples/Breadcrumbs";
 import { navbar, navbarContainer, navbarRow } from "examples/Navbars/DashboardNavbar/styles";
 
 // Material Dashboard 2 React context
-import { useMaterialUIController, setTransparentNavbar } from "context";
+import { useMaterialUIController, setTransparentNavbar, setMiniSidenav } from "context";
+import { Button, Icon } from "@mui/material";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -61,8 +62,22 @@ function DashboardNavbar({ absolute, light, isMini }) {
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light, darkMode })}
     >
       <Toolbar sx={(theme) => navbarContainer(theme)}>
-        <MDBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
+        <MDBox
+          color="inherit"
+          mb={{ xs: 1, md: 0 }}
+          sx={(theme) => navbarRow(theme, { isMini })}
+          style={{ display: "flex" }}
+        >
           <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} />
+          {window.innerWidth < 1030 && (
+            <Button
+              onClick={() => {
+                setMiniSidenav(dispatch, false);
+              }}
+            >
+              <Icon>menu</Icon>
+            </Button>
+          )}
         </MDBox>
       </Toolbar>
     </AppBar>

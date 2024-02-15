@@ -1,8 +1,9 @@
 import { useState } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 // @mui material components
 import Card from "@mui/material/Card";
-import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -12,9 +13,9 @@ import MDTypography from "components/MDTypography";
 import DataTable from "examples/Tables/DataTable";
 // Data
 import data from "layouts/dashboard/components/Projects/data";
-import data1 from "layouts/dashboard/components/Projects/data/data.json";
-import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
 import SuccessSnackbar from "examples/Snackbar/SuccessSnackbar";
+import ErrorSnackbar from "examples/Snackbar/ErrorSnackbar";
+import traceAndThrow from "utils/Errors";
 import ComplaintPopup from "../../../../examples/Popup/ComplaintPopup";
 
 function Projects() {
@@ -34,20 +35,67 @@ function Projects() {
     setShowDetails(false);
   };
 
-  const { columns, rows, assignees } = data(handleClick);
-
+  const { columns, rows } = data(handleClick);
   const handleAssign = (id, name) => {
     if (name === "") {
       setError(true);
       setText("Complaint is not assigned as name was not provided.");
     } else {
-      setSuccess(true);
-      setText("Complaint is assigned Successfully.");
-      console.log(id, name);
-      setShowDetails(false);
-      handleClose();
+      axios
+        .patch(
+          `https://api.rausmartcity.com/update-user-complaints/secure/${id}`,
+          {
+            assignedTo: name,
+            complaintStatus: "Resolved",
+          },
+          {
+            // Request headers
+            headers: {
+              Authorization: `Bearer ${Cookies.get("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then(() => {
+          setSuccess(true);
+          setText("Complaint is assigned Successfully.");
+          setShowDetails(false);
+          handleClose();
+        })
+        .catch((err) => {
+          setError(true);
+          setText(traceAndThrow(err));
+        });
       // Backend update name to particular id on backend
     }
+  };
+
+  const handleReject = (id) => {
+    axios
+      .patch(
+        `https://api.rausmartcity.com/update-user-complaints/secure/${id}`,
+        {
+          complaintStatus: "Rejected",
+        },
+        {
+          // Request headers
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(() => {
+        setSuccess(true);
+        setText("Complaint is Rejected Successfully.");
+        setShowDetails(false);
+        handleClose();
+      })
+      .catch((err) => {
+        setError(true);
+        setText(traceAndThrow(err));
+      });
+    // Backend update name to particular id on backend
   };
 
   return (
@@ -58,20 +106,6 @@ function Projects() {
             <MDTypography variant="h6" gutterBottom>
               Complaint
             </MDTypography>
-            <MDBox display="flex" alignItems="center" lineHeight={0}>
-              <Icon
-                sx={{
-                  fontWeight: "bold",
-                  color: ({ palette: { info } }) => info.main,
-                  mt: -0.5,
-                }}
-              >
-                done
-              </Icon>
-              <MDTypography variant="button" fontWeight="regular" color="text">
-                &nbsp;<strong>Total Complaints {data1.totalcomplaints}</strong>
-              </MDTypography>
-            </MDBox>
           </MDBox>
         </MDBox>
         <MDBox>
@@ -88,8 +122,8 @@ function Projects() {
         <ComplaintPopup
           detailData={detailData}
           handleClose={handleClose}
-          assignees={assignees}
           handleAssign={handleAssign}
+          handleReject={handleReject}
         />
       )}
       {error && (

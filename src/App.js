@@ -22,13 +22,14 @@ import themeDark from "assets/theme-dark";
 
 // Material Dashboard 2 React routes
 import routes from "routes";
+import Cookies from "js-cookie";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
-import brandWhite from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
+import img from "assets/images/rajwada.jpeg";
+// import brandDark from "assets/images/rajwada.jpeg";
 import data from "data.json";
 
 export default function App() {
@@ -39,8 +40,8 @@ export default function App() {
     layout,
     openConfigurator,
     sidenavColor,
-    transparentSidenav,
-    whiteSidenav,
+    // transparentSidenav,
+    // whiteSidenav,
     darkMode,
   } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
@@ -120,7 +121,8 @@ export default function App() {
         <>
           <Sidenav
             color={sidenavColor}
-            brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+            // brand={(brand && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+            brand={img}
             brandName={data.brandName}
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
@@ -133,7 +135,12 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+        <Route
+          path="*"
+          element={
+            <Navigate to={Cookies.get("token") ? "/dashboard" : "/authentication/sign-in"} />
+          }
+        />
       </Routes>
     </ThemeProvider>
   );

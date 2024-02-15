@@ -1,9 +1,12 @@
+import Cookies from "js-cookie";
+
 import Dashboard from "layouts/dashboard";
 import WaterSupply from "layouts/watersupply";
 import Requests from "layouts/requests";
 import Complaints from "layouts/complaints";
 import Events from "layouts/events";
-import Profile from "layouts/profile";
+import Slider from "layouts/slider";
+// import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 
@@ -17,7 +20,7 @@ const routes = [
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
-    component: <Dashboard />,
+    component: Cookies.get("token") ? <Dashboard /> : <SignIn />,
   },
   {
     type: "collapse",
@@ -25,7 +28,7 @@ const routes = [
     key: "Requests",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/request",
-    component: <Requests />,
+    component: Cookies.get("token") ? <Requests /> : <SignIn />,
   },
   {
     type: "collapse",
@@ -33,7 +36,7 @@ const routes = [
     key: "watersupply",
     icon: <Icon fontSize="small">local_drink</Icon>,
     route: "/watersupply",
-    component: <WaterSupply />,
+    component: Cookies.get("token") ? <WaterSupply /> : <SignIn />,
   },
   {
     type: "collapse",
@@ -41,7 +44,7 @@ const routes = [
     key: "complaints",
     icon: <Icon fontSize="small">description</Icon>,
     route: "/complaints",
-    component: <Complaints />,
+    component: Cookies.get("token") ? <Complaints /> : <SignIn />,
   },
   {
     type: "collapse",
@@ -49,29 +52,30 @@ const routes = [
     key: "events",
     icon: <Icon fontSize="small">diversity_3</Icon>,
     route: "/events",
-    component: <Events />,
+    component: Cookies.get("token") ? <Events /> : <SignIn />,
   },
+
   {
     type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
+    name: "Slider",
+    key: "Slider",
+    icon: <Icon fontSize="small">image</Icon>,
+    route: "/slider",
+    component: Cookies.get("token") ? <Slider /> : <SignIn />,
   },
   {
-    type: "collapse",
-    name: "Sign In",
+    type: "logout",
+    name: "Sign Out",
     key: "sign-in",
-    icon: <Icon fontSize="small">login</Icon>,
+    icon: <Icon fontSize="small">logout</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
   },
   {
-    type: "collapse",
-    name: "Sign Up",
+    type: "collapse1",
+    name: "Sign Out",
     key: "sign-up",
-    icon: <Icon fontSize="small">assignment</Icon>,
+    icon: <Icon fontSize="small">logout</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
   },
